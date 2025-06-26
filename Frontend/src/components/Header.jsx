@@ -17,8 +17,6 @@ const Header = () => {
     const { isConnected, isConnecting, connect, disconnect, getStatus } = useSimpleWebSocket();
 
     const signOutRedirect = () => {
-        disconnect();
-        return;
         deleteAccessToken();
         const clientId = congitoUserPoolClientID;
         const logoutUri = window.location.origin;

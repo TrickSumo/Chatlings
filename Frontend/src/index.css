@@ -4,6 +4,7 @@ body {
   box-sizing: border-box;
   font-family: 'Inter';
   background-color: #fff4d4;
+  background-image: url('./assets/chat-bg.png');
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
