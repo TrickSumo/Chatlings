@@ -14,7 +14,7 @@ const Header = () => {
     const maxReconnectAttempts = 5;
     const reconnectTimeout = useRef(null);
 
-    const { isConnected, isConnecting, connect, disconnect, getStatus } = useSimpleWebSocket();
+    const { isConnected, isConnecting, connect, disconnect, getStatus, sendMessageWithAck } = useSimpleWebSocket();
 
     const signOutRedirect = () => {
         deleteAccessToken();
@@ -35,7 +35,7 @@ const Header = () => {
             console.log('🔌 Header: Starting initial connection...');
             connect();
         }
-    }, []); // Only run once on mount
+    }, [isConnected]); // Only run once on mount
 
     // Subscribe to connection state changes for reconnection logic
     useEffect(() => {
@@ -43,22 +43,22 @@ const Header = () => {
             (state) => state.connectionState,
             (connectionState, previousConnectionState) => {
                 console.log(`🔄 Header: Connection state changed from ${previousConnectionState} to ${connectionState}`);
-                
+
                 // Handle disconnection (attempt reconnect)
-                if (connectionState === CONNECTION_STATES.DISCONNECTED && 
+                if (connectionState === CONNECTION_STATES.DISCONNECTED &&
                     previousConnectionState === CONNECTION_STATES.CONNECTED) {
-                    
+
                     console.log(`🔌 Header: Connection lost, attempting reconnect (${reconnectAttempts.current + 1}/${maxReconnectAttempts})`);
-                    
+
                     if (reconnectAttempts.current < maxReconnectAttempts) {
                         // Clear any existing timeout
                         if (reconnectTimeout.current) {
                             clearTimeout(reconnectTimeout.current);
                         }
-                        
+
                         // Exponential backoff: 1s, 2s, 4s, 8s, 16s
                         const delay = Math.pow(2, reconnectAttempts.current) * 1000;
-                        
+
                         reconnectTimeout.current = setTimeout(() => {
                             reconnectAttempts.current++;
                             connect();
@@ -68,7 +68,7 @@ const Header = () => {
                         reconnectAttempts.current = 0; // Reset for future attempts
                     }
                 }
-                
+
                 // Reset reconnect attempts on successful connection
                 if (connectionState === CONNECTION_STATES.CONNECTED) {
                     console.log('✅ Header: Successfully connected, resetting reconnect attempts');

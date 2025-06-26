@@ -10,7 +10,8 @@ export const useSimpleWebSocket = () => {
     sendMessage,
     clearMessages,
     isConnected,
-    isConnecting
+    isConnecting,
+    sendMessageWithAck
   } = useSimpleWebSocketStore();
 
   // Simple send function
@@ -42,6 +43,7 @@ export const useSimpleWebSocket = () => {
     connect,
     disconnect,
     send,
+    sendMessageWithAck,
     clearMessages,
     getStatus
   };
