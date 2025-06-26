@@ -19,13 +19,17 @@ const getJwtSigningKey = async (accessToken, kid) => {
 }
 
 export const handler = async (event) => {
-console.log("auth called");
+console.log("auth called", event);
+
+const token = event.queryStringParameters?.Authorization
+console.log(token);
 
 
 try {
 
   const methodArn = event?.methodArn;
-  const accessToken = event?.headers?.Authorization?.split(" ")[1]; // Token format is "Bearer ACCESS_TOKEN"
+  const accessToken = event?.queryStringParameters?.Authorization;
+  // const accessToken = event?.headers?.Authorization?.split(" ")[1]; // Token format is "Bearer ACCESS_TOKEN"
   if (!accessToken) {
     throw new Error('Unauthorized');
   }
@@ -40,7 +44,7 @@ const {header:tokenHeader, payload:tokenPayload} = jwt.decode(accessToken, { com
         console.log(err);
         throw new Error('Unauthorized');
     }
-    // console.log("auth success");
+    console.log("auth success");
     return {
       "principalId": "connected Successfully",
       "policyDocument": {

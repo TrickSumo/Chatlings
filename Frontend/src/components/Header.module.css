@@ -1,0 +1,14 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+}
+
+.headerIcons {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #346230;
+  /* Green color to match theme */
+  cursor: pointer;
+}

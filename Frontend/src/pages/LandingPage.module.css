@@ -1,0 +1,382 @@
+/* App.module.css */
+
+.app {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #87CEEB 0%, #4A90E2 100%);
+  background-image: url('../assets/bg-landingpage-small.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Section */
+.header {
+  position: relative;
+  z-index: 10;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 1400px;
+  justify-content: flex-start;
+}
+
+.logo {
+  width: 30%
+}
+
+
+/* Hero Section */
+.hero {
+  position: relative;
+  z-index: 10;
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.heroText {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroTitle {
+  font-size: clamp(28px, 6vw, 48px);
+  font-weight: 800;
+  color: #2C5282;
+  margin: 0 0 16px 0;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.heroSubtitle {
+  font-size: clamp(16px, 4vw, 18px);
+  color: #2C5282;
+  margin: 0 0 30px 0;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.getStartedBtn {
+  background: #FF6B35;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.getStartedBtn:hover {
+  background: #E55A2B;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+.heroImage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+}
+
+.duckCharacter {
+  width: clamp(180px, 25vw, 280px);
+  height: auto;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.1));
+  max-width: 100%;
+}
+
+/* Features Section */
+.features {
+  background: #FFF8F0;
+  padding: 60px 20px;
+  position: relative;
+  z-index: 10;
+  /* border-radius: 40px 40px 0 0; */
+  border-top-left-radius: 100% 80px;
+  border-top-right-radius: 100% 80px;
+  margin-top: 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.featuresContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+
+.featuresTitle {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 700;
+  color: #2C5282;
+  margin: 0 0 40px 0;
+}
+
+.featuresGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 50px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.featureItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.featureIcon {
+  width: clamp(50px, 8vw, 60px);
+  height: clamp(50px, 8vw, 60px);
+  padding: 12px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.featureTitle {
+  font-size: clamp(18px, 4vw, 20px);
+  font-weight: 600;
+  color: #2C5282;
+  margin: 0;
+}
+
+.featureDescription {
+  font-size: clamp(14px, 3vw, 16px);
+  color: #4A5568;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* Trust Section */
+.trustSection {
+  padding: 0 20px 40px 20px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.trustText {
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  font-size: clamp(14px, 3vw, 16px);
+  color: #4A5568;
+  line-height: 1.6;
+}
+
+.ageInfo {
+  font-weight: 600;
+  color: #2C5282;
+  margin-top: 10px;
+}
+
+
+/* Responsive Design */
+
+/* Tablet and small desktop */
+@media (min-width: 768px) {
+  .header {
+    padding: 20px 30px;
+  }
+  
+  .hero {
+    padding: 40px 30px;
+  }
+  
+  .features {
+    padding: 80px 30px;
+  }
+  
+  .featuresGrid {
+    gap: 40px;
+  }
+  
+  .featureItem {
+    min-width: 280px;
+  }
+}
+
+/* Large tablets and small desktops */
+/* Tablets and larger screens */
+@media (min-width: 768px) {
+  .app {
+    background-image: url('../assets/bg-landingpage.png');
+  }
+  
+  .header {
+    padding: 20px 40px;
+  }
+  
+  .hero {
+    padding: 40px;
+  }
+}
+
+
+@media (min-width: 1024px) {
+  .heroContent {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    text-align: left;
+  }
+  
+  .heroText {
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .heroTitle,
+  .heroSubtitle {
+    text-align: left;
+  }
+  
+  .heroImage {
+    flex-shrink: 0;
+  }
+  
+  .featuresGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .featureItem {
+    flex: 0 1 calc(50% - 20px);
+    min-width: 300px;
+  }
+}
+
+/* Large desktops */
+@media (min-width: 1200px) {
+  .header {
+    padding: 24px 60px;
+  }
+  
+  .hero {
+    padding: 60px;
+  }
+  
+  .brandName {
+    font-size: 42px;
+  }
+  
+  .featuresGrid {
+    justify-content: space-between;
+  }
+  
+  .featureItem {
+    flex: 0 1 calc(25% - 30px);
+    min-width: 250px;
+    max-width: 280px;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1600px) {
+  .header {
+    padding: 30px 80px;
+  }
+  
+  .hero {
+    padding: 80px;
+  }
+  
+  .brandName {
+    font-size: 48px;
+  }
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .hero {
+    padding: 20px 16px;
+  }
+  
+  .features {
+    padding: 40px 16px;
+    margin-top: 20px;
+  }
+  
+  .getStartedBtn {
+    padding: 14px 28px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .featuresGrid {
+    gap: 20px;
+  }
+  
+  .featureItem {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 16px;
+  }
+  
+  .trustSection {
+    padding: 0 16px 30px 16px;
+  }
+}
