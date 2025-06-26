@@ -55,6 +55,7 @@ const {header:tokenHeader, payload:tokenPayload} = jwt.decode(accessToken, { com
       },
       "context": {
         "username": tokenPayload?.username || "unknown",
+        "userId": tokenPayload?.sub || "unknown"
       }
     }
 }); 
