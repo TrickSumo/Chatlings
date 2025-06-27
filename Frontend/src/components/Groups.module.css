@@ -58,8 +58,8 @@
 .logo {
   width: 80px;
   height: 80px;
-  /* border-radius: 50%; */
-  /* box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); */
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
 }
 
 .title {
@@ -411,7 +411,7 @@
 }
 
 .sendButton {
-  background: #bcf597;
+  background: #4A90E2;
   border: none;
   width: 50px;
   height: 50px;
@@ -425,13 +425,13 @@
 }
 
 .sendButton:hover {
-  background: #4ef056;
+  background: #357ABD;
   transform: scale(1.05);
 }
 
 .sendIcon {
   font-size: 20px;
-  /* transform: rotate(45deg); */
+  transform: rotate(45deg);
 }
 
 /* Modal Styles */

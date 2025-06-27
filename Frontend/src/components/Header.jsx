@@ -4,6 +4,7 @@ import { deleteAccessToken } from '../utils/utils';
 import styles from './Header.module.css';
 import useSimpleWebSocket from '../hooks/useSimpleWebSocket';
 import useSimpleWebSocketStore, { CONNECTION_STATES } from '../stores/simpleWebSocketStore';
+import logo from '../assets/logonew.png'
 
 const congitoUserPoolClientID = import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID;
 const cognitoUserPoolDomain = import.meta.env.VITE_COGNITO_USER_POOL_DOMAIN;
@@ -93,7 +94,7 @@ const Header = () => {
     return (
         <>
             <div className={styles.header}>
-                <div className={styles.headerIcons} onClick={() => navigate("/")}>🏠</div>
+                <div className={styles.headerIcons} onClick={() => navigate("/")}>  <img src={logo} alt="Chatlings Logo" width={"90vw"} /></div>
                 <div>{getConnectionStatus()}</div>
                 <div className={styles.headerIcons} onClick={signOutRedirect}>👋🏽</div>
             </div>
