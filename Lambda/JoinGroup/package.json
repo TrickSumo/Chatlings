@@ -1,5 +1,5 @@
 {
-  "name": "defualt",
+  "name": "joingroup",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
@@ -8,5 +8,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.777.0",
+    "@aws-sdk/lib-dynamodb": "^3.778.0"
   }
 }
