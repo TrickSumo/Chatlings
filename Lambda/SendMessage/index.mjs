@@ -39,7 +39,7 @@ export const handler = async (event) => {
         const getCommand = new GetCommand({
             TableName: tableName,
             Key: {
-                PK: `USER#${userId}}`,
+                PK: `USER#${userId}`,
                 SK: `MEMBER#${groupName}`,
             },
         });
@@ -63,12 +63,15 @@ export const handler = async (event) => {
                 message,
                 sentBy: `USER#${userId}`,
                 sentAt: new Date().toISOString(),
-                type: "text",
-                moderationStatus: "pending", 
+                type: "text"
             },
         });
         const putResponse = await docClient.send(putCommand);
-        console.log("Message sent successfully:", putResponse);
+        const successResponse = {
+            action: "messageSent",
+            message: "Message sent successfully!",
+        };
+        return { body: JSON.stringify({ status: 200, successResponse }) };
 
     }
     catch (err) {
