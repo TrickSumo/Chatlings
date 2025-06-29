@@ -7,13 +7,14 @@ import MessageInput from '../components/MessageInput';
 import useSimpleWebSocket from '../hooks/useSimpleWebSocket';
 import useGroupChatStore from '../stores/groupChatStore';
 import { webSocketActions } from '../utils/constants';
+import MessageWatcher from '../components/MessageWatcher';
 
 const Home = () => {
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false)
 
   const { isConnected, sendMessageWithAck } = useSimpleWebSocket();
-  const { groups, setGroups, addGroup ,selectedGroup, 
-    setSelectedGroup, groupChats, setGroupChats, addGroupChat, 
+  const { groups, setGroups, addGroup, selectedGroup,
+    setSelectedGroup, groupChats, setGroupChats, addGroupChat,
     currentUser, initializeUser } = useGroupChatStore();
 
   const handleNewGroupClick = () => {
@@ -28,7 +29,7 @@ const Home = () => {
   const handleSendMessage = async (message) => {
     try {
       const res = await sendMessageWithAck(webSocketActions.SEND_MESSAGE_TO_GROUP, { message, groupName: selectedGroup.split("GROUP#")[1] });
-      if (res.statusCode === 200) { 
+      if (res.statusCode === 200) {
         addGroupChat(selectedGroup, res.message);
       }
     }
@@ -87,11 +88,14 @@ const Home = () => {
       )}
 
       {/* Create Chat Modal */}
-      {showCreateGroupModal && <CreateGroupModal 
-      setShowCreateGroupModal={setShowCreateGroupModal} 
-      sendMessageWithAck={sendMessageWithAck}
-      addGroup={addGroup}
+      {showCreateGroupModal && <CreateGroupModal
+        setShowCreateGroupModal={setShowCreateGroupModal}
+        sendMessageWithAck={sendMessageWithAck}
+        addGroup={addGroup}
       />}
+
+      {/* Keep Track Of New Messages */}
+      <MessageWatcher />
     </div>
   )
 };

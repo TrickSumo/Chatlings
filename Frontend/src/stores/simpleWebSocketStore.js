@@ -16,6 +16,13 @@ const useSimpleWebSocketStore = create(subscribeWithSelector((set, get) => ({
     messages: [],
     error: null,
 
+    // Remove first message - to simulate FIFO queue behavior
+    removeFirstMessage: () => {
+        set(state => ({
+            messages: state.messages.length > 0 ? state.messages.slice(1) : []
+        }));
+    },
+
     // Connect to WebSocket
     connect: () => {
         const state = get();
@@ -83,11 +90,7 @@ const useSimpleWebSocketStore = create(subscribeWithSelector((set, get) => ({
 
             // Add to messages array for regular messages (broadcasts, etc.)
             set(state => ({
-                messages: [...state.messages, {
-                    id: Date.now(),
-                    timestamp: new Date().toISOString(),
-                    ...messageData
-                }]
+                messages: [...state.messages, {...messageData }]
             }));
         };
 
