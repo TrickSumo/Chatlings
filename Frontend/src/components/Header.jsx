@@ -16,11 +16,12 @@ const Header = () => {
     const maxReconnectAttempts = 5;
     const reconnectTimeout = useRef(null);
 
-    const { isConnected, isConnecting, connect, disconnect, getStatus, sendMessageWithAck } = useSimpleWebSocket();
+    const { isConnected, isConnecting, connect, disconnect, getStatus } = useSimpleWebSocket();
     const { initializeUser } = useGroupChatStore();
 
     const signOutRedirect = () => {
         deleteAccessToken();
+        disconnect();
         const clientId = congitoUserPoolClientID;
         const logoutUri = window.location.origin;
         const cognitoDomain = cognitoUserPoolDomain;
@@ -36,7 +37,7 @@ const Header = () => {
     useEffect(() => {
         // Initialize user when component mounts
         initializeUser();
-        
+
         if (!isConnected && !isConnecting) {
             console.log('🔌 Header: Starting initial connection...');
             connect();

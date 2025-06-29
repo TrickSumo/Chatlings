@@ -60,7 +60,10 @@ export const handler = async (event) => {
             Item: putItem,
         });
         const putResponse = await docClient.send(putCommand);
-        if (putResponse?.$metadata?.httpStatusCode) return createResponse(200, { message: putItem }, requestId);
+        
+        if (putResponse?.$metadata?.httpStatusCode) {
+            return createResponse(200, { message: putItem }, requestId);
+        }
     }
     catch (err) {
         console.log("Failed to send message", err);
