@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-rekognition": "^3.839.0",
+    "@aws-sdk/client-s3": "^3.839.0",
     "install": "^0.13.0",
     "npm": "^11.4.2"
   }
