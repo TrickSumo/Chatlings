@@ -6,55 +6,43 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const tableName = process.env.tableName || "Chatlings";
 
-export const handler = async (event) => {
-    console.log("FetchGroupChatHistory handler started", event);
-    const userId = event?.requestContext?.authorizer?.userId;
+const createResponse = (statusCode, payload, requestId = null) => {
+    return { body: JSON.stringify({ statusCode, ...payload, requestId }) };
+}
 
+export const handler = async (event) => {
     let messageData = {};
     try {
         messageData = JSON.parse(event.body || '{}');
     } catch (err) {
-        const errorResponse = {
-            action: "error",
-            message: "Invalid JSON in message body"
-        };
-        return { body: JSON.stringify({ status: 400, errorResponse }) };
+        return createResponse(400, { error: "Invalid JSON in message body" }, null);
     }
+    const requestId = messageData?.requestId || null;
+
 
     const groupName = messageData?.groupName;
     if (!groupName) {
-        const errorResponse = {
-            action: "error",
-            message: "Group name is required!"
-        };
-        return { body: JSON.stringify({ status: 400, errorResponse }) };
+        return createResponse(400, { error: "Group name is required!" }, requestId);
     }
 
     try {
-
         const command = new QueryCommand({
-            TableName: "Chatlings",
+            TableName: tableName,
             KeyConditionExpression: "PK = :pk AND begins_with(SK, :skPrefix)",
             ExpressionAttributeValues: {
-                ":pk": `GROUP#${groupId}`,
+                ":pk": `GROUP#${groupName}`,
                 ":skPrefix": "MESSAGE#"
             },
-            //  ScanIndexForward: false // to get messages in descending order
-            Limit: 60, // Adjust as needed
+            Limit: 60,
         });
 
-        const response = await client.send(command);
-
+        const response = await docClient.send(command);
         const messages = response.Items || [];
-        console.log("Fetched messages:", messages);
 
-        return { body: JSON.stringify({ status: 200, messages }) };
-
+        return createResponse(200, { status: 200, messages }, requestId);
     }
     catch (err) {
         console.log("Error in ListGroupsForUser handler:", err);
         return { body: JSON.stringify({ status: 500, errorResponse: { action: "error", message: err } }) };
-
     }
-
 }

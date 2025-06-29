@@ -1,0 +1,430 @@
+/* CreateGroupModal.module.css - Dedicated styles for Create Group Modal */
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+/* Modal Container */
+.modal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 90vh;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modal Header */
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 3px solid #4A90E2;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px 20px 0 0;
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-size: 26px;
+  font-weight: 800;
+  color: #2C5282;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  background: #F0F0F0;
+  color: #333;
+  transform: scale(1.1);
+}
+
+/* Modal Content */
+.modalContent {
+  padding: 30px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.inputGroup {
+  margin-bottom: 25px;
+}
+
+.inputLabel {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2C5282;
+  margin-bottom: 10px;
+}
+
+.modalInput {
+  width: 100%;
+  padding: 15px 18px;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.modalInput:focus {
+  border-color: #4A90E2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.modalInput::placeholder {
+  color: #999;
+}
+
+/* Emoji Selector */
+.emojiSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.selectedEmoji {
+  width: 70px;
+  height: 70px;
+  background: #F0F8FF;
+  border: 3px solid #4A90E2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.2);
+}
+
+.emojiGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 15px;
+  border: 2px solid #E0E0E0;
+  border-radius: 15px;
+  background: #FAFAFA;
+}
+
+.emojiOption {
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: white;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.emojiOption:hover {
+  background: #E8F4FD;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.selectedEmojiOption {
+  background: #4A90E2 !important;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+}
+
+/* Modal Actions */
+.modalActions {
+  padding: 25px 30px;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  border-top: 1px solid #E0E0E0;
+  background: #fafafa;
+  border-radius: 0 0 20px 20px;
+  flex-shrink: 0;
+}
+
+.cancelButton {
+  background: #F5F5F5;
+  color: #666;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+  background: #E0E0E0;
+  color: #333;
+  transform: translateY(-1px);
+}
+
+.createButton {
+  background: #4A90E2;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+.createButton:hover:not(:disabled) {
+  background: #357ABD;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+.createButton:disabled {
+  background: #CCC;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Animations */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Responsive Design */
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .modal {
+    max-width: 500px;
+    max-height: 85vh;
+  }
+
+  .modalTitle {
+    font-size: 28px;
+  }
+
+  .modalHeader {
+    padding: 30px 35px;
+  }
+
+  .modalContent {
+    padding: 35px;
+  }
+
+  .modalActions {
+    padding: 30px 35px;
+  }
+
+  .selectedEmoji {
+    width: 80px;
+    height: 80px;
+    font-size: 36px;
+  }
+
+  .emojiGrid {
+    grid-template-columns: repeat(10, 1fr);
+    gap: 12px;
+    padding: 18px;
+  }
+
+  .emojiOption {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+  }
+
+  .modalInput {
+    padding: 18px 20px;
+    font-size: 18px;
+  }
+
+  .inputLabel {
+    font-size: 18px;
+  }
+
+  .cancelButton,
+  .createButton {
+    padding: 16px 32px;
+    font-size: 18px;
+  }
+}
+
+/* Large Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .modal {
+    max-width: 550px;
+    max-height: 80vh;
+  }
+
+  .modalTitle {
+    font-size: 30px;
+  }
+
+  .modalHeader {
+    padding: 35px 40px;
+  }
+
+  .modalContent {
+    padding: 40px;
+  }
+
+  .modalActions {
+    padding: 35px 40px;
+  }
+
+  .selectedEmoji {
+    width: 85px;
+    height: 85px;
+    font-size: 38px;
+  }
+
+  .emojiGrid {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 14px;
+    padding: 20px;
+    max-height: 250px;
+  }
+
+  .emojiOption {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  .modalInput {
+    padding: 20px 22px;
+    font-size: 20px;
+  }
+
+  .inputLabel {
+    font-size: 20px;
+  }
+
+  .cancelButton,
+  .createButton {
+    padding: 18px 35px;
+    font-size: 20px;
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .modal {
+    width: 95%;
+    max-width: 350px;
+    margin: 10px;
+  }
+
+  .modalTitle {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .modalHeader {
+    padding: 20px 25px;
+  }
+
+  .modalContent {
+    padding: 25px;
+  }
+
+  .modalActions {
+    padding: 20px 25px;
+    flex-direction: column;
+  }
+
+  .selectedEmoji {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .emojiGrid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    padding: 12px;
+    max-height: 180px;
+  }
+
+  .emojiOption {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .modalInput {
+    padding: 12px 15px;
+    font-size: 16px;
+  }
+
+  .inputLabel {
+    font-size: 14px;
+  }
+
+  .cancelButton,
+  .createButton {
+    padding: 12px 24px;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .createButton {
+    order: 1;
+    margin-bottom: 10px;
+  }
+
+  .cancelButton {
+    order: 2;
+  }
+}

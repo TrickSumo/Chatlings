@@ -6,29 +6,26 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const tableName = process.env.tableName || "Chatlings";
 
+const createResponse = (statusCode, payload, requestId = null) => {
+    return { body: JSON.stringify({ statusCode, ...payload, requestId }) };
+}
+
 export const handler = async (event) => {
     const userId = event?.requestContext?.authorizer?.userId;
+
     let messageData = {};
     try {
         messageData = JSON.parse(event.body || '{}');
     } catch (err) {
-        const errorResponse = {
-            action: "error",
-            message: "Invalid JSON in message body"
-        };
-        return { body: JSON.stringify({ status: 400, errorResponse }) };
+        return createResponse(400, { error: "Invalid JSON in message body" }, null);
     }
-
+    const requestId = messageData?.requestId || null;
     const groupName = messageData.groupName;
     const groupCode = messageData.groupCode;
     const groupIcon = messageData.groupIcon || "🌿"; // Default icon if not provided
 
     if (!groupName) {
-        const errorResponse = {
-            action: "error",
-            message: "Group name is required!"
-        };
-        return { body: JSON.stringify({ status: 400, errorResponse }) };
+        return createResponse(400, { error: "Group name is required!" }, requestId);
     }
 
     const command = new TransactWriteCommand({
@@ -77,26 +74,16 @@ export const handler = async (event) => {
     try {
         const response = await docClient.send(command);
         if (response.$metadata.httpStatusCode === 200) {
-            const successResponse = {
-                action: "groupCreated",
-                message: "Group created successfully!",
-            };
-            return { body: JSON.stringify({ status: 200, successResponse }) };
+            return createResponse(200, { "message": { groupName, "PK": `GROUP#${groupName}`, "SK": "META", groupCode, groupIcon, createdBy: `USER#${userId}`, createdAt: new Date().toISOString() } }, requestId);
         }
     }
     catch (err) {
-        let errorResponse;
+        let error;
         if (err?.CancellationReasons[0].Code === "ConditionalCheckFailed") {
-            errorResponse = {
-                action: "error",
-                message: "Group already exists!"
-            };
+            error = "Group already exists!"
         } else {
-            errorResponse = {
-                action: "error",
-                message: "Failed to create group",
-            };
+            error = "Failed to create group"
         }
-        return { body: JSON.stringify({ status: 500, errorResponse }) };
+        return createResponse(500, { error }, requestId);
     }
 }

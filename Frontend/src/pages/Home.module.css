@@ -294,7 +294,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  max-width: calc(100% - 60px); /* Account for avatar + gap */
+  max-width: calc(100% - 60px);
   min-width: 0;
   flex: 1;
   overflow: hidden;
@@ -586,6 +586,7 @@
     opacity: 0;
     transform: scale(0.9) translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -657,16 +658,16 @@
   .app {
     max-width: 500px;
   }
-  
+
   .messageBubble {
     max-width: calc(100% - 20px);
     font-size: 16px;
   }
-  
+
   .currentUserMessage .messageBubble {
     max-width: calc(100% - 20px);
   }
-  
+
   .messageContent {
     max-width: calc(100% - 70px);
   }
@@ -683,102 +684,102 @@
     min-height: calc(100vh - 40px);
     overflow-x: hidden;
   }
-  
+
   .logo {
     width: 100px;
     height: 100px;
   }
-  
+
   .title {
     font-size: 32px;
   }
-  
+
   .header {
     padding: 25px 30px 15px 30px;
   }
-  
+
   .newChatBtn {
     width: 250px;
     padding: 18px 45px;
     font-size: 20px;
   }
-  
+
   .groupsSection {
     margin: 15px 30px;
     padding: 25px;
   }
-  
+
   .groupItem {
     padding: 18px;
   }
-  
+
   .groupIcon {
     width: 45px;
     height: 45px;
     font-size: 22px;
   }
-  
+
   .groupName {
     font-size: 20px;
   }
-  
+
   .chatContainer {
     padding: 25px 30px;
   }
-  
+
   .messageBubble {
     font-size: 18px;
     padding: 14px 18px;
     max-width: calc(100% - 30px);
   }
-  
+
   .currentUserResponse {
     font-size: 18px;
     padding: 14px 18px;
     max-width: calc(100% - 30px);
   }
-  
+
   .currentUserMessage .messageBubble {
     max-width: calc(100% - 30px);
   }
-  
+
   .messageContent {
     max-width: calc(100% - 75px);
   }
-  
+
   .avatar {
     width: 45px;
     height: 45px;
     font-size: 22px;
   }
-  
+
   .messageInput {
     padding: 25px 30px;
   }
-  
+
   .textInput {
     padding: 18px 25px;
     font-size: 18px;
   }
-  
+
   .sendButton {
     width: 55px;
     height: 55px;
   }
-  
+
   .videoCallButton {
     width: 50px;
     height: 50px;
   }
-  
+
   .videoIcon {
     font-size: 20px;
   }
-  
+
   .expandButton {
     font-size: 22px;
   }
-  
+
   .showMoreText {
     font-size: 18px;
   }
@@ -793,156 +794,156 @@
     border-radius: 20px;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
   }
-  
+
   .logo {
     width: 120px;
     height: 120px;
   }
-  
+
   .title {
     font-size: 36px;
   }
-  
+
   .header {
     padding: 30px 40px 20px 40px;
   }
-  
+
   .newChatContainer {
     padding: 20px 40px;
   }
-  
+
   .newChatBtn {
     width: 300px;
     padding: 20px 50px;
     font-size: 22px;
   }
-  
+
   .groupsSection {
     margin: 20px 40px;
     padding: 30px;
   }
-  
+
   .groupsTitle {
     font-size: 26px;
   }
-  
+
   .groupItem {
     padding: 20px;
   }
-  
+
   .groupIcon {
     width: 50px;
     height: 50px;
     font-size: 24px;
   }
-  
+
   .groupName {
     font-size: 22px;
   }
-  
+
   .chatContainer {
     padding: 30px 40px;
     gap: 20px;
   }
-  
+
   .messageBubble {
     font-size: 20px;
     padding: 16px 20px;
     max-width: calc(100% - 80px);
   }
-  
+
   .currentUserResponse {
     font-size: 20px;
     padding: 16px 20px;
     max-width: calc(100% - 80px);
   }
-  
+
   .currentUserMessage .messageBubble {
     max-width: calc(100% - 80px);
   }
-  
+
   .messageContent {
     max-width: calc(100% - 100px);
   }
-  
+
   .avatar {
     width: 50px;
     height: 50px;
     font-size: 24px;
   }
-  
+
   .messageInput {
     padding: 30px 40px;
   }
-  
+
   .textInput {
     padding: 20px 30px;
     font-size: 20px;
   }
-  
+
   .sendButton {
     width: 60px;
     height: 60px;
   }
-  
+
   .videoCallButton {
     width: 55px;
     height: 55px;
   }
-  
+
   .videoIcon {
     font-size: 22px;
   }
-  
+
   .sendIcon {
     font-size: 24px;
   }
-  
+
   .modal {
     max-width: 500px;
   }
-  
+
   .modalTitle {
     font-size: 28px;
   }
-  
+
   .modalInput {
     padding: 18px;
     font-size: 18px;
   }
-  
+
   .inputLabel {
     font-size: 18px;
   }
-  
+
   .cancelButton,
   .createButton {
     padding: 15px 30px;
     font-size: 18px;
   }
-  
+
   .selectedEmoji {
     width: 70px;
     height: 70px;
     font-size: 32px;
   }
-  
+
   .emojiGrid {
     grid-template-columns: repeat(10, 1fr);
     gap: 10px;
     padding: 15px;
   }
-  
+
   .emojiOption {
     width: 45px;
     height: 45px;
     font-size: 22px;
   }
-  
+
   .expandButton {
     font-size: 24px;
   }
-  
+
   .showMoreText {
     font-size: 20px;
   }
@@ -957,163 +958,163 @@
     border-radius: 24px;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
   }
-  
+
   .logo {
     width: 140px;
     height: 140px;
   }
-  
+
   .title {
     font-size: 40px;
   }
-  
+
   .header {
     padding: 35px 50px 25px 50px;
   }
-  
+
   .newChatContainer {
     padding: 25px 50px;
   }
-  
+
   .newChatBtn {
     width: 350px;
     padding: 22px 55px;
     font-size: 24px;
   }
-  
+
   .groupsSection {
     margin: 25px 50px;
     padding: 35px;
   }
-  
+
   .groupsTitle {
     font-size: 28px;
   }
-  
+
   .groupItem {
     padding: 22px;
   }
-  
+
   .groupIcon {
     width: 55px;
     height: 55px;
     font-size: 26px;
   }
-  
+
   .groupName {
     font-size: 24px;
   }
-  
+
   .chatContainer {
     padding: 35px 50px;
     gap: 25px;
   }
-  
+
   .messageBubble {
     font-size: 22px;
     padding: 18px 22px;
     max-width: calc(100% - 80px);
   }
-  
+
   .currentUserResponse {
     font-size: 22px;
     padding: 18px 22px;
     max-width: calc(100% - 80px);
   }
-  
+
   .currentUserMessage .messageBubble {
     max-width: calc(100% - 80px);
   }
-  
+
   .messageContent {
     max-width: calc(100% - 100px);
   }
-  
+
   .avatar {
     width: 55px;
     height: 55px;
     font-size: 26px;
   }
-  
+
   .messageInput {
     padding: 35px 50px;
   }
-  
+
   .textInput {
     padding: 22px 35px;
     font-size: 22px;
   }
-  
+
   .sendButton {
     width: 65px;
     height: 65px;
   }
-  
+
   .videoCallButton {
     width: 60px;
     height: 60px;
   }
-  
+
   .videoIcon {
     font-size: 24px;
   }
-  
+
   .sendIcon {
     font-size: 26px;
   }
-  
+
   .modal {
     max-width: 550px;
   }
-  
+
   .modalTitle {
     font-size: 30px;
   }
-  
+
   .modalHeader,
   .modalContent,
   .modalActions {
     padding: 30px;
   }
-  
+
   .modalInput {
     padding: 20px;
     font-size: 20px;
   }
-  
+
   .inputLabel {
     font-size: 20px;
   }
-  
+
   .cancelButton,
   .createButton {
     padding: 18px 35px;
     font-size: 20px;
   }
-  
+
   .selectedEmoji {
     width: 80px;
     height: 80px;
     font-size: 36px;
   }
-  
+
   .emojiGrid {
     grid-template-columns: repeat(12, 1fr);
     gap: 12px;
     padding: 18px;
     max-height: 250px;
   }
-  
+
   .emojiOption {
     width: 50px;
     height: 50px;
     font-size: 24px;
   }
-  
+
   .expandButton {
     font-size: 26px;
   }
-  
+
   .showMoreText {
     font-size: 22px;
   }
@@ -1126,58 +1127,58 @@
     border-radius: 0;
     overflow-x: hidden;
   }
-  
+
   .header {
     padding: 15px;
   }
-  
+
   .logo {
     width: 70px;
     height: 70px;
   }
-  
+
   .title {
     font-size: 24px;
   }
-  
+
   .newChatBtn {
     width: 150px;
     padding: 12px 30px;
     font-size: 16px;
   }
-  
+
   .groupsSection {
     margin: 10px 15px;
     padding: 15px;
   }
-  
+
   .chatContainer {
     padding: 15px;
   }
-  
+
   .messageInput {
     padding: 15px;
   }
-  
+
   .videoCallButton {
     width: 40px;
     height: 40px;
   }
-  
+
   .videoIcon {
     font-size: 16px;
   }
-  
+
   .messageBubble {
     max-width: calc(100vw - 100px);
     font-size: 14px;
     padding: 10px 14px;
   }
-  
+
   .currentUserMessage .messageBubble {
     max-width: calc(100vw - 60px);
   }
-  
+
   .messageContent {
     max-width: calc(100vw - 90px);
   }
@@ -1189,6 +1190,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1198,4 +1200,30 @@
 .messageBubble,
 .currentUserResponse {
   animation: messageSlideIn 0.3s ease-out;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loader {
+  border-top: 4px solid #22223b;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+  margin: 1.5rem auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

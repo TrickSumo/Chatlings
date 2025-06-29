@@ -6,31 +6,25 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const tableName = process.env.tableName || "Chatlings";
 
-export const handler = async (event) => {
-    console.log("JoinGroup handler started", event);
+const createResponse = (statusCode, payload, requestId = null) => {
+    return { body: JSON.stringify({ statusCode, ...payload, requestId }) };
+}
 
+export const handler = async (event) => {
     const userId = event?.requestContext?.authorizer?.userId;
 
     let messageData = {};
     try {
         messageData = JSON.parse(event.body || '{}');
     } catch (err) {
-        const errorResponse = {
-            action: "error",
-            message: "Invalid JSON in message body"
-        };
-        return { body: JSON.stringify({ status: 400, errorResponse }) };
+        return createResponse(400, { error: "Invalid JSON in message body" }, null);
     }
-
+    const requestId = messageData?.requestId || null;
     const groupName = messageData?.groupName;
     const groupCode = messageData?.groupCode;
 
     if (!groupName) {
-        const errorResponse = {
-            action: "error",
-            message: "Group name is required!"
-        };
-        return { body: JSON.stringify({ status: 400, errorResponse }) };
+        return createResponse(400, { error: "Group name is required!" }, requestId);
     }
 
     try {
@@ -44,25 +38,17 @@ export const handler = async (event) => {
             ProjectionExpression: "groupCode"
         });
 
-        const response = await docClient.send(getCommand);
+        const getCommandResponse = await docClient.send(getCommand);
 
-        if (!response.Item) {
-            const errorResponse = {
-                action: "error",
-                message: "Group does not exist!"
-            };
-            return { body: JSON.stringify({ status: 404, errorResponse }) };
+        if (!getCommandResponse.Item) {
+            return createResponse(404, { error: "Group does not exist!" }, requestId);
         }
 
         if (
-            response?.Item?.groupCode &&
-            String(response.Item.groupCode) !== String(groupCode)
+            getCommandResponse?.Item?.groupCode &&
+            String(getCommandResponse.Item.groupCode) !== String(groupCode)
         ) {
-            const errorResponse = {
-            action: "error",
-            message: "Invalid group code!"
-            };
-            return { body: JSON.stringify({ status: 403, errorResponse }) };
+            return createResponse(403, { error: "Invalid group code!" }, requestId);
         }
 
         const transactionCommand = new TransactWriteCommand({
@@ -94,19 +80,20 @@ export const handler = async (event) => {
 
         const trasactionResponse = await docClient.send(transactionCommand);
         if (trasactionResponse.$metadata.httpStatusCode === 200) {
-            const successResponse = {
-                action: "groupJoined",
-                message: "Group joined successfully!",
-            };
-            return { body: JSON.stringify({ status: 200, successResponse }) };
+            return createResponse(200, {
+                message: {
+                    groupName,
+                    PK: `GROUP#${groupName}`,
+                    SK: "META",
+                    groupCode: getCommandResponse.Item.groupCode || null,
+                    joinedAt: new Date().toISOString(),
+                    groupIcon: getCommandResponse.Item.groupIcon || "🌿"
+                }
+            }, requestId);
         }
     }
     catch (err) {
         console.log("Error joining group:", err);
-        let errorResponse = {
-            action: "error",
-            message: "Failed to join group",
-        };
-        return { body: JSON.stringify({ status: 500, errorResponse }) };
+        return createResponse(500, { error: "Failed to join group" }, requestId);
     }
 }

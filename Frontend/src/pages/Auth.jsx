@@ -26,7 +26,7 @@ const Auth = () => {
         // if (isAuthenticated) fetchIdentityId();
         if (isAuthenticated) {
             setMessage("Authenticated successfully!");
-            navigate("/");
+            navigate("/app");
         }
         //  else {
         //     setMessage("Authentication failed or not completed.");

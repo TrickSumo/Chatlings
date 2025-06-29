@@ -1,17 +1,38 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './Groups.module.css'
-import useGroupChatStore from '../stores/groupChatStore'
+import { webSocketActions } from '../utils/constants';
 
-const Groups = () => {
+const Groups = ({groups, setGroups, selectedGroup, setSelectedGroup, sendMessageWithAck}) => {
     const [showAllGroups, setShowAllGroups] = useState(false)
+    const [loading, setLoading] = useState(true);
 
-    const { groups, groupChats, emojiOptions, selectedGroup, setSelectedGroup } = useGroupChatStore();
+    useEffect(() => {
+        setLoading(true);
+        const fetchGroups = async () => {
+            try {
+                const res = await sendMessageWithAck(webSocketActions.LIST_GROUPS_FOR_USER);
+                console.log('Fetched groups:', res);
+                setGroups(res.groups || []);
+                setSelectedGroup(res.groups?.[0]?.PK || res.groups?.[0]?.groupId || null); // Set first group as selected by default
+            
+            
+            console.log('Selected Group:', selectedGroup)}
+            catch (error) {
+                console.error('Error fetching groups:', error);
+            }
+            finally {
+                setLoading(false);
+            }
+        };
+        fetchGroups()
+    }, [])
 
     // Create a reordered groups array with selected group at top
     const getOrderedGroups = () => {
-        if (selectedGroup === 0) return groups; // If first group is selected, no need to reorder
-        const selectedGroupObj = groups.find(g => g.id === selectedGroup);
-        const otherGroups = groups.filter(g => g.id !== selectedGroup);
+        if (!groups || groups.length === 0) return [];
+        if (selectedGroup === null || selectedGroup === undefined) return groups; // If no group is selected, show original order
+        const selectedGroupObj = groups.find(group => (group.PK || group.groupId) === selectedGroup);
+        const otherGroups = groups.filter(group => (group.PK || group.groupId) !== selectedGroup);
         return selectedGroupObj ? [selectedGroupObj, ...otherGroups] : groups;
     }
 
@@ -22,15 +43,23 @@ const Groups = () => {
         setShowAllGroups(!showAllGroups)
     }
 
-    const handleGroupSelect = (groupIndex) => {
-        setSelectedGroup(groupIndex)
+    const handleGroupSelect = (groupId) => {
+        setSelectedGroup(groupId)
         // If a group is selected while in expanded mode, collapse the list
         if (showAllGroups) {
             setShowAllGroups(false)
         }
     }
 
-    if(groups.length === 0) return <></>
+    if (loading || !groups) {
+        return (
+            <div className={styles.loaderContainer}>
+                <div className={styles.loader} />
+            </div>
+        )
+    }
+
+    if (groups.length === 0) return <></>
 
     return (
         <div className={styles.groupsSection}>
@@ -47,12 +76,12 @@ const Groups = () => {
             <div className={styles.groupsList}>
                 {displayedGroups.map((group) => (
                     <div
-                        key={group.id}
-                        className={`${styles.groupItem} ${selectedGroup === group.id ? styles.selectedGroupItem : ''}`}
-                        onClick={() => handleGroupSelect(group.id)}
+                        key={group.PK || group.groupId}
+                        className={`${styles.groupItem} ${selectedGroup === (group.PK || group.groupId) ? styles.selectedGroupItem : ''}`}
+                        onClick={() => handleGroupSelect(group.PK || group.groupId)} // PK is primary key. ie. group ID
                     >
-                        <div className={styles.groupIcon}>{group.icon}</div>
-                        <span className={styles.groupName}>{group.name}</span>
+                        <div className={styles.groupIcon}>{group.groupIcon || "🐥"}</div>
+                        <span className={styles.groupName}>{group.groupName}</span>
                         <span className={styles.chevron}>›</span>
                     </div>
                 ))}

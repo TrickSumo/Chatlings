@@ -1,0 +1,177 @@
+/* Message Input Component Styles */
+.messageInput {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background: white;
+  border-top: 1px solid #E0E0E0;
+  margin-top: auto;
+}
+
+.videoCallButton {
+  background: #FFB6C1;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 12px rgba(255, 182, 193, 0.3);
+  flex-shrink: 0;
+}
+
+.videoCallButton:hover:not(:disabled) {
+  background: #FF91A4;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+}
+
+.videoCallButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.videoIcon {
+  font-size: 18px;
+}
+
+.textInput {
+  flex: 1;
+  background: #FFE55C;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  color: #2C5282;
+  transition: all 0.3s ease;
+}
+
+.textInput::placeholder {
+  color: rgba(44, 82, 130, 0.6);
+}
+
+.textInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.textInput:focus {
+  box-shadow: 0 0 0 2px rgba(255, 229, 92, 0.5);
+}
+
+.sendButton {
+  background: #bcf597;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  flex-shrink: 0;
+}
+
+.sendButton:hover:not(:disabled) {
+  background: #4ef056;
+  transform: scale(1.05);
+}
+
+.sendButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sendIcon {
+  font-size: 20px;
+}
+
+.attachmentButton {
+  background: #f8ca89;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 12px rgba(255, 179, 71, 0.3);
+  flex-shrink: 0;
+}
+
+.attachmentButton:hover:not(:disabled) {
+  background: #fac943;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 179, 71, 0.4);
+}
+
+.attachmentButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.attachmentIcon {
+  font-size: 30px;
+  transform: rotate(-45deg);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .messageInput {
+    padding: 15px;
+    gap: 8px;
+  }
+
+  .videoCallButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .videoIcon {
+    font-size: 16px;
+  }
+
+  .textInput {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .sendButton {
+    width: 45px;
+    height: 45px;
+  }
+
+  .sendIcon {
+    font-size: 18px;
+  }
+
+  .attachmentButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .attachmentIcon {
+    font-size: 16px;
+  }
+
+  .attachmentButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .attachmentIcon {
+    font-size: 16px;
+  }
+}

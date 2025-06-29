@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import styles from '../pages/Home.module.css'
+import styles from './CreateGroupModal.module.css'
 import useGroupChatStore from '../stores/groupChatStore'
+import { useNavigate } from "react-router";
+import { webSocketActions } from '../utils/constants';
 
-const CreateGroupModal = ({ setShowCreateGroupModal }) => {
+const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGroup }) => {
 
-    const [selectedEmoji, setSelectedEmoji] = useState('🎯');
+    const [selectedEmoji, setSelectedEmoji] = useState('🌿');
     const [groupName, setGroupName] = useState('')
     const [groupCode, setGroupCode] = useState('')
 
@@ -17,10 +19,43 @@ const CreateGroupModal = ({ setShowCreateGroupModal }) => {
         setSelectedEmoji('🎯')
     }
 
-    const handleCreateGroup = () => {
+    const handleJoinGroup = async () => {
         if (groupName.trim() && groupCode.trim()) {
-            console.log('Creating chat:', { groupName, groupCode, emoji: selectedEmoji })
-            handleCloseModal()
+            console.log('Joining Group:', { groupName, groupCode, groupIcon: selectedEmoji })
+            try {
+                const res = await sendMessageWithAck(webSocketActions.JOIN_GROUP, { groupName, groupCode, groupIcon: selectedEmoji })
+                addGroup(res.message)
+                alert(`Joined group ${groupName} successfully!`)
+
+            }
+            catch (err) {
+                console.error('Error joining group:', err);
+                alert(`Failed to join group: ${err.message || 'Unknown error'}`);
+
+            }
+            finally {
+                handleCloseModal();
+            }
+        }
+    }
+
+    const handleCreateGroup = async () => {
+        if (groupName.trim()) {
+            console.log('Creating Group:', { groupName, groupCode, emoji: selectedEmoji })
+            try {
+                const res = await sendMessageWithAck(webSocketActions.CREATE_GROUP, { groupName, groupCode, groupIcon: selectedEmoji })
+                addGroup(res.message)
+                alert(`Group ${groupName} created successfully!`)
+                handleCloseModal()
+            }
+
+            catch (err) {
+                console.error('Error creating group:', err);
+                alert(`Failed to create group: ${err.message || 'Unknown error'}`);
+            }
+            finally {
+                handleCloseModal();
+            }
         }
     }
 
@@ -28,7 +63,7 @@ const CreateGroupModal = ({ setShowCreateGroupModal }) => {
         <div className={styles.modalOverlay} onClick={handleCloseModal}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                    <h2 className={styles.modalTitle}>Create New Chat</h2>
+                    <h2 className={styles.modalTitle}>Create or Join New Group!</h2>
                     <button className={styles.closeButton} onClick={handleCloseModal}>
                         ✕
                     </button>
@@ -85,6 +120,13 @@ const CreateGroupModal = ({ setShowCreateGroupModal }) => {
                     </button>
                     <button
                         className={styles.createButton}
+                        onClick={handleJoinGroup}
+                        disabled={!groupName.trim() || !groupCode.trim()}
+                    >
+                        Join
+                    </button>
+                    <button
+                        className={styles.createButton}
                         onClick={handleCreateGroup}
                         disabled={!groupName.trim() || !groupCode.trim()}
                     >
@@ -94,6 +136,7 @@ const CreateGroupModal = ({ setShowCreateGroupModal }) => {
             </div>
         </div>
     )
+
 }
 
 export default CreateGroupModal

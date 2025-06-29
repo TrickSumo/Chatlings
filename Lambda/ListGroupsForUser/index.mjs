@@ -6,13 +6,25 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const tableName = process.env.tableName || "Chatlings";
 
+const createResponse = (statusCode, payload, requestId = null) => {
+    return { body: JSON.stringify({ statusCode, ...payload, requestId }) };
+}
+
 export const handler = async (event) => {
-    console.log("JoinGroup handler started", event);
     const userId = event?.requestContext?.authorizer?.userId;
 
+    let messageData = {};
     try {
+        messageData = JSON.parse(event.body || '{}');
+    } catch (err) {
+        return createResponse(400, { error: "Invalid JSON in message body" }, null);
+    }
+    const requestId = messageData?.requestId || null;
+
+    try {
+        // Get list Of Groups where user is a member
         const queryCommand = new QueryCommand({
-            TableName: "Chatlings",
+            TableName: tableName,
             KeyConditionExpression: "PK = :pk AND begins_with(SK, :skPrefix)",
             ProjectionExpression: "SK",
             ExpressionAttributeValues: {
@@ -22,34 +34,27 @@ export const handler = async (event) => {
         });
 
         const queryResponse = await docClient.send(queryCommand);
-        console.log("Query response:", queryResponse);
 
+        // User does not belong to any group
         if (!queryResponse.Items || queryResponse.Items.length === 0)
-            return { body: JSON.stringify({ status: 200, groups: [] }) };
+            return createResponse(200, { groups: [] }, requestId)
 
-
+        // Batch get the groups metadata 
         const keys = queryResponse.Items.map(item => (
             { PK: `GROUP#${item.SK.split("MEMBER#")[1]}`, "SK": "META" }
         ))
-
         const batchCommand = new BatchGetCommand({
             RequestItems: {
-                [tableName]: {  // 👈 dynamic table name using computed property
-                    Keys: keys     // array of { PK, SK } objects
+                [tableName]: {
+                    Keys: keys
                 }
             }
         });
-        
         const batchResponse = await docClient.send(batchCommand);
-        console.log("Batch response:", batchResponse);
-        if (!batchResponse.Responses || batchResponse.Responses[tableName].length === 0)
-            return { body: JSON.stringify({ status: 200, groups: [] }) };
-        else return { body: JSON.stringify({ status: 200, groups: batchResponse.Responses[tableName] }) };
+        return createResponse(200, { groups: batchResponse?.Responses?.[tableName] || [] }, requestId);
     }
     catch (err) {
         console.log("Error in ListGroupsForUser handler:", err);
-        return { body: JSON.stringify({ status: 500, errorResponse: { action: "error", message: err } }) };
-
+        return createResponse(500, { error: err });
     }
-
 }

@@ -52,31 +52,36 @@ const useSimpleWebSocketStore = create(subscribeWithSelector((set, get) => ({
             let messageData;
             try {
                 messageData = JSON.parse(event.data);
-                if (messageData?.requestId) {
-                    // Check if this is an error response using multiple criteria
-                    const isError = messageData.error || 
-                                  messageData.statusCode >= 400 ||
-                                  messageData.message?.toLowerCase().includes('error') ||
-                                  messageData.success === false;
-                    
-                    if (isError) {
-                        const errorMessage = messageData.error || 
-                                           messageData.message || 
-                                           `Server error (${messageData.statusCode || 'unknown'})`;
-                        console.error('❌ Server error response:', errorMessage);
-                        get().rejectPendingRequest(messageData.requestId, new Error(errorMessage));
-                    } else {
-                        // Success response
-                        console.log('✅ Server success response:', messageData);
-                        get().resolvePendingRequest(messageData.requestId, messageData);
-                    }
-                    return; // Skip regular push handling
-                }
-            } catch {
+            } catch (parseError) {
                 console.error('Failed to parse message, using raw text:', event.data);
+                messageData = { text: event.data };
             }
 
-            // Add to messages array
+            // Handle responses with requestId (request/response pattern)
+            if (messageData?.requestId) {
+                console.log('Message data:', messageData);
+                
+                // Check if this is an error response using multiple criteria
+                const isError = messageData.error || 
+                              messageData.statusCode >= 400 ||
+                              (typeof messageData.message === 'string' && messageData.message.toLowerCase().includes('error')) ||
+                              messageData.success === false;
+                
+                if (isError) {
+                    const errorMessage = messageData.error || 
+                                       messageData.message || 
+                                       `Server error (${messageData.statusCode || 'unknown'})`;
+                    console.error('❌ Server error response:', errorMessage);
+                    get().rejectPendingRequest(messageData.requestId, new Error(errorMessage));
+                } else {
+                    // Success response
+                    console.log('✅ Server success response:', messageData);
+                    get().resolvePendingRequest(messageData.requestId, messageData);
+                }
+                return; // Skip regular message handling for request/response pattern
+            }
+
+            // Add to messages array for regular messages (broadcasts, etc.)
             set(state => ({
                 messages: [...state.messages, {
                     id: Date.now(),
