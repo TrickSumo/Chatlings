@@ -104,7 +104,7 @@ const LandingPage = () => {
                     <div className={styles.trustSection}>
                         <p className={styles.trustText}>
                             Built with privacy & security at heart. All messages are moderated using trusted AI models.
-                            <span className={styles.ageInfo}>Designed for ages 8-14</span>
+                            <br /><span className={styles.ageInfo}>Designed for ages 8-14</span>
                         </p>
                     </div>
                 </div>
