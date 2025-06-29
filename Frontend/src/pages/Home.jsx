@@ -14,11 +14,16 @@ const Home = () => {
   const { isConnected, sendMessageWithAck } = useSimpleWebSocket();
   const { groups, setGroups, addGroup ,selectedGroup, 
     setSelectedGroup, groupChats, setGroupChats, addGroupChat, 
-    currentUser } = useGroupChatStore();
+    currentUser, initializeUser } = useGroupChatStore();
 
   const handleNewGroupClick = () => {
     setShowCreateGroupModal(true)
   }
+
+  // Initialize current user when component mounts
+  useEffect(() => {
+    initializeUser();
+  }, [initializeUser]);
 
   const handleSendMessage = async (message) => {
     try {

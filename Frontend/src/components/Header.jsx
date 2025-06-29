@@ -4,6 +4,7 @@ import { deleteAccessToken } from '../utils/utils';
 import styles from './Header.module.css';
 import useSimpleWebSocket from '../hooks/useSimpleWebSocket';
 import useSimpleWebSocketStore, { CONNECTION_STATES } from '../stores/simpleWebSocketStore';
+import useGroupChatStore from '../stores/groupChatStore';
 import logo from '../assets/logonew.png'
 
 const congitoUserPoolClientID = import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID;
@@ -16,6 +17,7 @@ const Header = () => {
     const reconnectTimeout = useRef(null);
 
     const { isConnected, isConnecting, connect, disconnect, getStatus, sendMessageWithAck } = useSimpleWebSocket();
+    const { initializeUser } = useGroupChatStore();
 
     const signOutRedirect = () => {
         deleteAccessToken();
@@ -30,8 +32,11 @@ const Header = () => {
         return <>{status.icon} {status.text}</>
     }
 
-    // Initial connection
+    // Initial connection and user initialization
     useEffect(() => {
+        // Initialize user when component mounts
+        initializeUser();
+        
         if (!isConnected && !isConnecting) {
             console.log('🔌 Header: Starting initial connection...');
             connect();
