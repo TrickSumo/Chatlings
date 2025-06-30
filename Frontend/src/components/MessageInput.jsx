@@ -2,10 +2,12 @@ import { useState } from 'react'
 import styles from './MessageInput.module.css'
 import { generateUniqueKey } from '../utils/utils'
 import { webSocketActions } from '../utils/constants'
+import { ToastContainer, toast } from 'react-toastify';
 
-const MessageInput = ({ onSendMessage, disabled = false,
-    sendMessageWithAck, addGroupChat, selectedGroup, currentUser }) => {
-
+const MessageInput = ({
+    onSendMessage, sendMessageWithAck, addGroupChat,
+    selectedGroup, currentUser, disabled = false
+}) => {
     const [message, setMessage] = useState('')
 
     const handleSend = () => {
@@ -21,11 +23,6 @@ const MessageInput = ({ onSendMessage, disabled = false,
             e.preventDefault()
             handleSend()
         }
-    }
-
-    const handleVideoCall = () => {
-        // TODO: Implement video call functionality
-        console.log('Video call initiated')
     }
 
     const handleAttachment = async () => {
@@ -55,6 +52,7 @@ const MessageInput = ({ onSendMessage, disabled = false,
                         // Upload file to S3 using presigned URL
                         try {
                             console.log('Uploading file to S3...');
+                            toast.info("☑️Uploading file...");
                             const uploadResponse = await fetch(presignedRes.url, {
                                 method: 'PUT',
                                 body: file,
@@ -65,6 +63,7 @@ const MessageInput = ({ onSendMessage, disabled = false,
 
                             if (uploadResponse.ok) {
                                 console.log('File uploaded successfully to S3');
+                                toast.success("✅Uploaded file...");
                                 addGroupChat(selectedGroup,
                                     {
                                         "SK": "MESSAGE#" + new Date().toISOString(),
@@ -95,11 +94,12 @@ const MessageInput = ({ onSendMessage, disabled = false,
     return (
         <div className={styles.messageInput}>
             <button
-                className={styles.videoCallButton}
-                onClick={handleVideoCall}
+                className={styles.attachmentButton}
+                onClick={handleAttachment}
                 disabled={disabled}
+                title="Upload attachments"
             >
-                <span className={styles.videoIcon}>🎦</span>
+                <span className={styles.attachmentIcon}>📎</span>
             </button>
             <input
                 type="text"
@@ -111,20 +111,13 @@ const MessageInput = ({ onSendMessage, disabled = false,
                 disabled={disabled}
             />
             <button
-                className={styles.attachmentButton}
-                onClick={handleAttachment}
-                disabled={disabled}
-                title="Upload attachments"
-            >
-                <span className={styles.attachmentIcon}>📎</span>
-            </button>
-            <button
                 className={styles.sendButton}
                 onClick={handleSend}
                 disabled={disabled || !message.trim()}
             >
                 <span className={styles.sendIcon}>🚀</span>
             </button>
+            <ToastContainer />
         </div>
     )
 }
