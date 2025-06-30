@@ -18,7 +18,6 @@ const MessageInput = ({
     }
 
     const handleKeyPress = (e) => {
-        console.log(`Key pressed: ${e.key}, Shift: ${e.shiftKey}`);
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault()
             handleSend()
@@ -52,7 +51,7 @@ const MessageInput = ({
                         // Upload file to S3 using presigned URL
                         try {
                             console.log('Uploading file to S3...');
-                            toast.info("☑️Uploading file...");
+                            toast.info("☑️Uploading file...", {autoClose: 1500});
                             const uploadResponse = await fetch(presignedRes.url, {
                                 method: 'PUT',
                                 body: file,
@@ -63,7 +62,7 @@ const MessageInput = ({
 
                             if (uploadResponse.ok) {
                                 console.log('File uploaded successfully to S3');
-                                toast.success("✅Uploaded file...");
+                                toast.success("✅Uploaded file...", {autoClose: 1500});
                                 addGroupChat(selectedGroup,
                                     {
                                         "SK": "MESSAGE#" + new Date().toISOString(),

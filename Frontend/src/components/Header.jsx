@@ -16,7 +16,7 @@ const Header = () => {
     const maxReconnectAttempts = 5;
     const reconnectTimeout = useRef(null);
 
-    const { isConnected, isConnecting, connect, disconnect, getStatus } = useSimpleWebSocket();
+    const { isConnected, isConnecting, connect, disconnect, getStatus, send } = useSimpleWebSocket();
     const { initializeUser, currentUser } = useGroupChatStore();
 
     const signOutRedirect = () => {
@@ -35,14 +35,19 @@ const Header = () => {
 
     // Initial connection and user initialization
     useEffect(() => {
-        // Initialize user when component mounts
         initializeUser();
-
         if (!isConnected && !isConnecting) {
             console.log('🔌 Header: Starting initial connection...');
             connect();
         }
-    }, [isConnected]); // Only run once on mount
+        const heartbeat = setInterval(() => {
+            if (isConnected) {
+                console.log('💓 Header: Sending heartbeat');
+                send({ action: 'ping' });
+            }
+        }, 360000); // Send heartbeat every 360 seconds ie. 6 minutes
+        return () => clearInterval(heartbeat);
+    }, [isConnected]);
 
     // Subscribe to connection state changes for reconnection logic
     useEffect(() => {
@@ -88,21 +93,20 @@ const Header = () => {
             }
         );
 
-        // Cleanup function
         return () => {
             unsubscribe();
             if (reconnectTimeout.current) {
                 clearTimeout(reconnectTimeout.current);
             }
         };
-    }, []); // Empty dependency array - subscription only needs to be set up once
+    }, []);
 
     return (
         <>
             <div className={styles.header}>
                 <div className={styles.headerIcons} onClick={() => navigate("/")}>  <img src={logo} alt="Chatlings Logo" width={"90vw"} /></div>
                 <div>{getConnectionStatus()}</div>
-                <div className={styles.headerIcons} onClick={signOutRedirect}>👋🏽{currentUser?.username||""}</div>
+                <div className={styles.headerIcons} onClick={signOutRedirect}>👋🏽{currentUser?.username || ""}</div>
             </div>
         </>
     );

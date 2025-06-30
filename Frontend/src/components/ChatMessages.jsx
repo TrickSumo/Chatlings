@@ -35,16 +35,16 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
                     {chat.sentBy === currentUser.username ? (
                         <div className={styles.currentUserMessage}>
                             <div className={styles.messageBubble}>
-                                {chat.type ==="txt" || chat.type ==="text"?chat.message:<img src={`./${chat.message}`}/>}
+                                {chat.type === "txt" || chat.type === "text" ? chat.message : <img src={`./${chat.message}`} />}
                             </div>
                         </div>
                     ) : (
                         <div className={styles.userMessage}>
-                            <div className={styles.avatar}>{chat.avatar || "🌸"}</div>
+                            <div className={styles.avatar}>{chat.sentBy === "askbot" ? "🤖" : chat.avatar || "🌸"}</div>
                             <div className={styles.messageContent}>
                                 <div className={styles.userName}>{chat.sentBy}</div>
                                 <div className={styles.messageBubble}>
-                                    {chat.type ==="txt" || chat.type ==="text"?chat.message:<img src={`./${chat.message}`}/>}
+                                    {chat.type === "txt" || chat.type === "text" ? chat.message : <img src={`./${chat.message}`} />}
                                 </div>
                             </div>
                         </div>

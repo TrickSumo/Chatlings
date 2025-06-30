@@ -28,7 +28,12 @@ const Home = () => {
 
   const handleSendMessage = async (message) => {
     try {
-      const res = await sendMessageWithAck(webSocketActions.SEND_MESSAGE_TO_GROUP, { message, groupName: selectedGroup.split("GROUP#")[1] });
+      let res = {};
+      alert(message.toLowerCase().includes("@askbot"))
+      if (message.toLowerCase().includes("@askbot")) {
+        res = await sendMessageWithAck(webSocketActions.SEND_MESSAGE_TO_ASKBOT, { message, groupName: selectedGroup.split("GROUP#")[1] });
+      }
+      else res = await sendMessageWithAck(webSocketActions.SEND_MESSAGE_TO_GROUP, { message, groupName: selectedGroup.split("GROUP#")[1] });
       if (res.statusCode === 200) {
         addGroupChat(selectedGroup, res.message);
       }

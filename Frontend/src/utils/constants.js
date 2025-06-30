@@ -7,4 +7,5 @@ export const webSocketActions = {
     CREATE_GROUP: 'createGroup',
     JOIN_GROUP: 'joinGroup',
     GENERATE_S3_PRE_SIGNED_URL :"generateS3PreSignedURL",
+    SEND_MESSAGE_TO_ASKBOT: "askBot",
 }

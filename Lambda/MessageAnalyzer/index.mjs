@@ -11,25 +11,19 @@ const dynamoClient = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const modelId = process.env.modelId || "amazon.nova-micro-v1:0";
 const tableName = process.env.tableName || "Chatlings";
-const websocketEndpoint = process.env.WEBSOCKET_ENDPOINT; // Set this in your Lambda environment variables
+const websocketEndpoint = process.env.WEBSOCKET_ENDPOINT;
 
 
 export const handler = async (event) => {
 
-    console.log(JSON.stringify(event));
-
     for (const record of event.Records) {
-        console.log(record.eventName, record.dynamodb.Keys.SK.S);
+        console.log("record", record);
 
         if (record.eventName === 'INSERT' && record.dynamodb.Keys.SK.S.includes("MESSAGE#")) {
             const messageData = record.dynamodb.NewImage;
             const message = messageData.message.S;
             const groupName = record.dynamodb.Keys.PK.S.replace("GROUP#", "");
 
-            console.log("Processing new message for group:", groupName);
-            console.log("Analyzing message:", message);
-
-            // Prepare the original message object
             const originalMessage = {
                 PK: record.dynamodb.Keys.PK.S,
                 SK: record.dynamodb.Keys.SK.S,
@@ -43,17 +37,15 @@ export const handler = async (event) => {
             if (isImage) {
                 console.log("📸 Image message detected, skipping AI moderation");
                 await notifyGroupMembers(groupName, originalMessage, false);
-                continue; // Continue to next record instead of returning
+                continue;
             }
 
             const converseCommand = new ConverseCommand({
                 modelId: modelId,
-                messages: [
+                system: [
                     {
-                        role: "user",
-                        content: [
-                            {
-                                text: `Is the following message safe for a kid-friendly chatroom? Please🥺 respond only "SAFE" or "UNSAFE".\n\n"${message}"
+                        text: `You are a moderator for kid friendly chat groups. Moderate hateful, scarey and anything not suitable for age 9. Please🥺 respond only "SAFE" or "UNSAFE""
+                                
                                 Example: 
 
                                 Input:- This is a great day!
@@ -64,6 +56,14 @@ export const handler = async (event) => {
 
                                 Input:- I love playing with my friends!
                                 Output:- SAFE`
+                    }
+                ],
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            {
+                                text: message
                             }
                         ]
                     }
@@ -127,7 +127,7 @@ export const handler = async (event) => {
                 console.error("🧠 Bedrock moderation failed:", err);
                 console.log("🧠 Bedrock moderation failed:", err.message || err);
 
-                // If moderation fails, send the original message (fail-safe)
+                // If moderation fails then also send the original message 
                 console.log("⚠️ Moderation failed, sending original message as fallback");
                 await notifyGroupMembers(groupName, originalMessage, false);
             }
@@ -138,13 +138,11 @@ export const handler = async (event) => {
 // Function to notify active group members about new messages
 const notifyGroupMembers = async (groupName, messageItem, isModerated = false) => {
     try {
-        // Skip notification if no WebSocket endpoint is configured
         if (!websocketEndpoint) {
             console.log("⚠️ No WebSocket endpoint configured, skipping notifications");
             return;
         }
 
-        // Create API Gateway Management API client for WebSocket
         const apiGatewayClient = new ApiGatewayManagementApiClient({
             endpoint: websocketEndpoint
         });
@@ -167,7 +165,6 @@ const notifyGroupMembers = async (groupName, messageItem, isModerated = false) =
             return;
         }
 
-        // Extract userIds from the members
         const userIds = membersResponse.Items.map(item =>
             item.SK.replace("MEMBER#", "")
         );
@@ -221,12 +218,6 @@ const notifyGroupMembers = async (groupName, messageItem, isModerated = false) =
                 console.log(`✅ ${isModerated ? 'Moderation' : 'Message'} notification sent to user ${conn.userId}`);
             } catch (err) {
                 console.log(`❌ Failed to notify user ${conn.userId} (${conn.connectionId}):`, err.message);
-
-                // If connection is stale, we could clean it up here
-                if (err.statusCode === 410) {
-                    console.log(`Connection ${conn.connectionId} is stale, should clean up`);
-                    // TODO: Remove stale connectionId from user profile
-                }
             }
         });
 
@@ -235,6 +226,5 @@ const notifyGroupMembers = async (groupName, messageItem, isModerated = false) =
 
     } catch (err) {
         console.error("Failed to notify group members:", err);
-        // Don't throw error here as message processing should continue
     }
 };

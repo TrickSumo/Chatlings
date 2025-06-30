@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styles from './CreateGroupModal.module.css'
 import useGroupChatStore from '../stores/groupChatStore'
-import { useNavigate } from "react-router";
 import { webSocketActions } from '../utils/constants';
+import { ToastContainer, toast } from 'react-toastify';
 
 const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGroup }) => {
 
@@ -20,18 +20,17 @@ const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGrou
     }
 
     const handleJoinGroup = async () => {
-        if (groupName.trim() && groupCode.trim()) {
+        if (groupName.trim()) {
             console.log('Joining Group:', { groupName, groupCode, groupIcon: selectedEmoji })
             try {
                 const res = await sendMessageWithAck(webSocketActions.JOIN_GROUP, { groupName, groupCode, groupIcon: selectedEmoji })
                 addGroup(res.message)
-                alert(`Joined group ${groupName} successfully!`)
+                toast.success(`Joined group ${groupName} successfully!`);
 
             }
             catch (err) {
                 console.error('Error joining group:', err);
-                alert(`Failed to join group: ${err.message || 'Unknown error'}`);
-
+                toast.error(`Failed to join group: ${err.message || 'Unknown error'}`);
             }
             finally {
                 handleCloseModal();
@@ -45,13 +44,13 @@ const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGrou
             try {
                 const res = await sendMessageWithAck(webSocketActions.CREATE_GROUP, { groupName, groupCode, groupIcon: selectedEmoji })
                 addGroup(res.message)
-                alert(`Group ${groupName} created successfully!`)
+                toast.success(`Group ${groupName} created successfully!`);
                 handleCloseModal()
             }
 
             catch (err) {
                 console.error('Error creating group:', err);
-                alert(`Failed to create group: ${err.message || 'Unknown error'}`);
+                toast.error(`Failed to create group: ${err.message || 'Unknown error'}`);
             }
             finally {
                 handleCloseModal();
@@ -121,14 +120,14 @@ const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGrou
                     <button
                         className={styles.createButton}
                         onClick={handleJoinGroup}
-                        disabled={!groupName.trim() || !groupCode.trim()}
+                        disabled={!groupName.trim()}
                     >
                         Join
                     </button>
                     <button
                         className={styles.createButton}
                         onClick={handleCreateGroup}
-                        disabled={!groupName.trim() || !groupCode.trim()}
+                        disabled={!groupName.trim()}
                     >
                         Create
                     </button>

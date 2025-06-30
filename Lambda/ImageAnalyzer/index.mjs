@@ -61,7 +61,6 @@ export const handler = async (event) => {
                 console.log("🗑️ Inappropriate image deleted from S3:", key);
             } catch (deleteError) {
                 console.error("❌ Error deleting image from S3:", deleteError);
-                // Continue with saving the violation message even if delete fails
             }
             
         } else {
@@ -93,6 +92,5 @@ export const handler = async (event) => {
 
     } catch (err) {
         console.error("❌ Rekognition error:", err);
-        throw err;
     }
 };
