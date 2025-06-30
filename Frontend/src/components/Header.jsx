@@ -17,7 +17,7 @@ const Header = () => {
     const reconnectTimeout = useRef(null);
 
     const { isConnected, isConnecting, connect, disconnect, getStatus } = useSimpleWebSocket();
-    const { initializeUser } = useGroupChatStore();
+    const { initializeUser, currentUser } = useGroupChatStore();
 
     const signOutRedirect = () => {
         deleteAccessToken();
@@ -102,7 +102,7 @@ const Header = () => {
             <div className={styles.header}>
                 <div className={styles.headerIcons} onClick={() => navigate("/")}>  <img src={logo} alt="Chatlings Logo" width={"90vw"} /></div>
                 <div>{getConnectionStatus()}</div>
-                <div className={styles.headerIcons} onClick={signOutRedirect}>👋🏽</div>
+                <div className={styles.headerIcons} onClick={signOutRedirect}>👋🏽{currentUser?.username||""}</div>
             </div>
         </>
     );

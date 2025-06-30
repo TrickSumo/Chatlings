@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import useSimpleWebSocketStore from '../stores/simpleWebSocketStore';
 import useGroupChatStore from '../stores/groupChatStore';
+import { ToastContainer, toast } from 'react-toastify';
 
 const MessageWatcher = () => {
 
@@ -15,10 +16,14 @@ const MessageWatcher = () => {
                     const messageToProcess = messages[0];
                     if (messageToProcess?.message?.sentBy === currentUser?.username) {
                         if (messageToProcess?.action == "messageModerated") {
-                            alert("Your message has been moderated and will not be displayed to  other users! \n Please be kind🌿.");
+                            toast.warn("Your message has been moderated and will not be displayed to  other users! \n Please be kind🌿.", {
+                                position: "top-center"
+                            });
                         }
                         else if (messageToProcess?.action == "newMessage" && messageToProcess?.message?.message === "Image removed for violation of community guidelines.") {
-                            alert("Your Image upload has been moderated and will not be displayed to  other users! \n Please be kind🌿.");
+                            toast.warn("Your Image upload has been moderated and will not be displayed to  other users! \n Please be kind🌿.", {
+                                position: "top-center"
+                            });
                         }
                     }
                     else {

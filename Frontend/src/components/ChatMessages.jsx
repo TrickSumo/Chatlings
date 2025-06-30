@@ -1,17 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import styles from '../pages/Home.module.css'
 import { webSocketActions } from '../utils/constants';
 
 const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, sendMessageWithAck }) => {
     const currentChats = groupChats?.[selectedGroup]
-    const chatContainerRef = useRef(null)
-
-    // Auto-scroll to bottom when chats change
-    useEffect(() => {
-        if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
-        }
-    }, [currentChats])
 
     useEffect(() => {
         const fetchChats = async (groupId) => {
@@ -30,14 +22,14 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
 
     if (!currentChats || currentChats.length === 0) {
         return (
-            <div className={styles.chatContainer} ref={chatContainerRef}>
+            <div className={styles.chatContainer}>
                 <div className={styles.noMessages}>No messages yet. Start chatting!</div>
             </div>
         )
     }
 
     return (
-        <div className={styles.chatContainer} ref={chatContainerRef}>
+        <div className={styles.chatContainer}>
             {currentChats?.map((chat) => (
                 <div key={chat.SK} className={styles.messageGroup}>
                     {chat.sentBy === currentUser.username ? (
