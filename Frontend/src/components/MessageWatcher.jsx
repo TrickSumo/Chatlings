@@ -13,13 +13,15 @@ const MessageWatcher = () => {
             (messages) => {
                 if (messages.length > 0) {
                     const messageToProcess = messages[0];
-                    if (messageToProcess?.action == "messageModerated" && messageToProcess?.message?.sentBy === currentUser?.username) {
-                        alert("Your message has been moderated and will not be displayed to  other users! \n Please be kind🌿.");
+                    if (messageToProcess?.message?.sentBy === currentUser?.username) {
+                        if (messageToProcess?.action == "messageModerated") {
+                            alert("Your message has been moderated and will not be displayed to  other users! \n Please be kind🌿.");
+                        }
+                        else if (messageToProcess?.action == "newMessage" && messageToProcess?.message?.message === "Image removed for violation of community guidelines.") {
+                            alert("Your Image upload has been moderated and will not be displayed to  other users! \n Please be kind🌿.");
+                        }
                     }
-                    else if (messageToProcess?.action == "newMessage" && messageToProcess?.message?.sentBy === currentUser?.username && messageToProcess?.message?.message === "Image removed for violation of community guidelines.") {
-                        alert("Your Image upload has been moderated and will not be displayed to  other users! \n Please be kind🌿.");
-                    }
-                    else if (messageToProcess?.message?.sentBy !== currentUser?.username) {
+                    else {
                         // alert(`Message from ${messageToProcess?.message?.sentBy} has been moderated and will not be displayed to you! \n Please be kind🌿.`);                      
                         addGroupChat(messageToProcess?.message?.PK, messageToProcess?.message)
                     }
