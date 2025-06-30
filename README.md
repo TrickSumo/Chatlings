@@ -5,10 +5,10 @@ Blog post on architecture of project:- https://medium.com/@QuantumScientistRishi
 
 Demo video:- https://youtu.be/-6383PUenpg
 
-Application URL:- https://d2t0lj9wibb5m4.cloudfront.net/app
+Application URL:- https://d2t0lj9wibb5m4.cloudfront.net
 username:- cog password:- Secure2025#
 
-Services used:-
+### Services used:-
 * AWS Lambda, DynamoDB, S3, Bedrock, Rekognition and API Gateway for backend.
 * Cognito userpool and Lambda authorizer for authentication. AWS CloudFront Distribution as entrypoint for application.
 * React, Zustand and other frontend tools for delightful interface.
