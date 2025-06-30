@@ -19,17 +19,7 @@ export const handler = async (event) => {
 
   let message = "";
 
-  // if (action === "ping") {
-  //   message = "Pong! 🏓";
-  // } else if (action === "pong") {
-  //   message = "Ping! 🎯";
-  // } else {
-  //   message = `Unknown action: ${action}`;
-  // }
-
-  switch(action) {
-    case "createGroup":
-      message = "Group created successfully!";
+  switch (action) {
     case "ping":
       message = "Pong! 🏓";
       break;
@@ -45,11 +35,7 @@ export const handler = async (event) => {
   //   Data: Buffer.from(JSON.stringify({ message })),
   // }));
 
-  // return { statusCode: 200 };
-
-  console.log("yyaa",body?.requestId);
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify({ message:"hhhkh3ne7773", requestId: body?.requestId }),
-  // };
+  return {
+    body: JSON.stringify({ statusCode: 200, message, requestId: body?.requestId }),
+  };
 };
