@@ -1,4 +1,9 @@
-export const WSS_API_BASE_URL = import.meta.env.VITE_WSS_API_BASE_URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const VITE_WSS_API_STAGE = import.meta.env.VITE_WSS_API_STAGE || "production";
+
+export const WSS_API_BASE_URL = `wss://${API_BASE_URL}/${VITE_WSS_API_STAGE}/`;
+export const API_URL = `https://${API_BASE_URL}`;
+
 
 export const getAccessToken = () => {
     const sessionStoragKeys = Object.keys(sessionStorage);

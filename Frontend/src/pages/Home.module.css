@@ -342,6 +342,15 @@
   line-height: 1.4;
 }
 
+.messageImage {
+  max-width: 250px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
 .currentUserResponse {
   background: #4A90E2;
   color: white;

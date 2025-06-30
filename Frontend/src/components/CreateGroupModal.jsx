@@ -4,7 +4,7 @@ import useGroupChatStore from '../stores/groupChatStore'
 import { webSocketActions } from '../utils/constants';
 import { ToastContainer, toast } from 'react-toastify';
 
-const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGroup }) => {
+const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, groups, addGroup }) => {
 
     const [selectedEmoji, setSelectedEmoji] = useState('🌿');
     const [groupName, setGroupName] = useState('')
@@ -19,12 +19,16 @@ const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGrou
         setSelectedEmoji('🎯')
     }
 
+    const addNewGroupToList = (groupData) => {
+        if (!groups.some(group => group.groupName === groupName))  addGroup(groupData);
+    }
+
     const handleJoinGroup = async () => {
         if (groupName.trim()) {
             console.log('Joining Group:', { groupName, groupCode, groupIcon: selectedEmoji })
             try {
                 const res = await sendMessageWithAck(webSocketActions.JOIN_GROUP, { groupName, groupCode, groupIcon: selectedEmoji })
-                addGroup(res.message)
+                addNewGroupToList(res.message)
                 toast.success(`Joined group ${groupName} successfully!`);
 
             }
@@ -43,7 +47,7 @@ const CreateGroupModal = ({ setShowCreateGroupModal, sendMessageWithAck, addGrou
             console.log('Creating Group:', { groupName, groupCode, emoji: selectedEmoji })
             try {
                 const res = await sendMessageWithAck(webSocketActions.CREATE_GROUP, { groupName, groupCode, groupIcon: selectedEmoji })
-                addGroup(res.message)
+                addNewGroupToList(res.message)
                 toast.success(`Group ${groupName} created successfully!`);
                 handleCloseModal()
             }

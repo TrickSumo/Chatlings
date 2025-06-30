@@ -20,7 +20,15 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
         fetchChats(selectedGroup);
     }, [selectedGroup])
 
-    if (!currentChats || currentChats.length === 0) {
+    if (!currentChats) {
+        return (
+            <div className={styles.chatContainer}>
+                <div className={styles.noMessages}>Loading!!!</div>
+            </div>
+        )
+    }
+
+    if (currentChats.length === 0) {
         return (
             <div className={styles.chatContainer}>
                 <div className={styles.noMessages}>No messages yet. Start chatting!</div>
@@ -35,7 +43,7 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
                     {chat.sentBy === currentUser.username ? (
                         <div className={styles.currentUserMessage}>
                             <div className={styles.messageBubble}>
-                                {chat.type === "txt" || chat.type === "text" ? chat.message : <img src={`./${chat.message}`} />}
+                                {chat.type === "txt" || chat.type === "text" ? chat.message : <img src={`./${chat.message}`} className={styles.messageImage} />}
                             </div>
                         </div>
                     ) : (
@@ -44,7 +52,7 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
                             <div className={styles.messageContent}>
                                 <div className={styles.userName}>{chat.sentBy}</div>
                                 <div className={styles.messageBubble}>
-                                    {chat.type === "txt" || chat.type === "text" ? chat.message : <img src={`./${chat.message}`} />}
+                                    {chat.type === "txt" || chat.type === "text" ? chat.message : <img src={`./${chat.message}`} className={styles.messageImage} />}
                                 </div>
                             </div>
                         </div>

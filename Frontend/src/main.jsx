@@ -13,7 +13,7 @@ import './index.css'
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4xNByjTAH",
   client_id: "3mtahugr0fpkbfioidkam7hibs",
-  redirect_uri: "http://localhost:5173/auth",
+  redirect_uri: `${window.location.origin}/auth`,
   response_type: "code",
   scope: "email openid phone",
 };

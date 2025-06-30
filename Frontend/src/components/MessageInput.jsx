@@ -51,7 +51,7 @@ const MessageInput = ({
                         // Upload file to S3 using presigned URL
                         try {
                             console.log('Uploading file to S3...');
-                            toast.info("☑️Uploading file...", {autoClose: 1500});
+                            toast.info("☑️Uploading file...", {autoClose: 3000});
                             const uploadResponse = await fetch(presignedRes.url, {
                                 method: 'PUT',
                                 body: file,
@@ -66,7 +66,7 @@ const MessageInput = ({
                                 addGroupChat(selectedGroup,
                                     {
                                         "SK": "MESSAGE#" + new Date().toISOString(),
-                                        "message": uniqueFileName,
+                                        "message": `media/${uniqueFileName}`,
                                         "type": "img",
                                         "PK": selectedGroup,
                                         "sentBy": currentUser.username

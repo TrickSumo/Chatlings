@@ -29,7 +29,6 @@ const Home = () => {
   const handleSendMessage = async (message) => {
     try {
       let res = {};
-      alert(message.toLowerCase().includes("@askbot"))
       if (message.toLowerCase().includes("@askbot")) {
         res = await sendMessageWithAck(webSocketActions.SEND_MESSAGE_TO_ASKBOT, { message, groupName: selectedGroup.split("GROUP#")[1] });
       }
@@ -96,6 +95,7 @@ const Home = () => {
       {showCreateGroupModal && <CreateGroupModal
         setShowCreateGroupModal={setShowCreateGroupModal}
         sendMessageWithAck={sendMessageWithAck}
+        groups={groups}
         addGroup={addGroup}
       />}
 
