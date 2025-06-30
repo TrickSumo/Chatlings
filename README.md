@@ -9,7 +9,6 @@ Chatlings🐾
 | **Group Message**      | `GROUP#<groupId>` | `MSG#<ISO timestamp>` | `sentBy`, `text`, `type`, `imageUrl`               | One row per message              |
 | **Group Member (FWD)** | `USER#<userId>`   | `MEMBER#<groupId>`    | `joinedAt`                                         | Links user → group               |
 | **Group Member (REV)** | `GROUP#<groupId>` | `MEMBER#<userId>`     | `joinedAt`                                         | Links group → user               |
-| **Moderated Content**  | `GROUP#<groupId>` | `MSG#<timestamp>`     | `moderationStatus: "removed"`                      | Use extra field if flagged by AI |
 
 ### DynamoDB Schema Design for Chatlings🐾
 
