@@ -34,7 +34,7 @@ export const handler = async (event) => {
     }
     const { header: tokenHeader, payload: tokenPayload } = jwt.decode(accessToken, { complete: true });
 
-    return jwt.verify(accessToken, jwtSigningKey || await getJwtSigningKey(accessToken, tokenHeader.kid), { 'algorithms': tokenHeader.alg }, (err) => {
+    return jwt.verify(accessToken, jwtSigningKey || await getJwtSigningKey(accessToken, tokenHeader.kid), { 'algorithms': ['RS256'] }, (err) => {
       if (err) {
         console.log(err);
         throw new Error('Unauthorized');
