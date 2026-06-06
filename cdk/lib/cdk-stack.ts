@@ -9,6 +9,7 @@ import { DynamoEventSource, S3EventSource } from 'aws-cdk-lib/aws-lambda-event-s
 import { readFileSync } from 'fs';
 import { createLambdas } from './lambdas';
 import { createWebSocketApi } from './websocket-api';
+import { createRestApi } from './rest-api';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -95,6 +96,11 @@ export class CdkStack extends cdk.Stack {
 
     // Wire WebSocket callback URL into MessageAnalyzer now that the API exists
     lambdas.messageAnalyzerFn.addEnvironment('WEBSOCKET_ENDPOINT', callbackUrl);
+
+    // Step 9 — REST API (signed cookies endpoint)
+    const { api: restApi } = createRestApi(this, {
+      generateSignedCookiesFn: lambdas.generateSignedCookiesFn,
+    });
 
   }
 
