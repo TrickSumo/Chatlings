@@ -9,10 +9,10 @@
   },
   "devDependencies": {
     "@types/jest": "^30",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.13.1",
+    "aws-cdk": "2.1121.0",
     "jest": "^30",
     "ts-jest": "^29",
-    "aws-cdk": "2.1121.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.3"
   },
