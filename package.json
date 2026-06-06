@@ -1,0 +1,27 @@
+{
+  "name": "chatlings",
+  "version": "1.0.0",
+  "description": "Chatlings 🐾 is a serverless, real-time chat platform designed for children aged 8–14. It ensures content safety using AI moderation and a delightful, kid-friendly design.",
+  "main": "index.js",
+  "dependencies": {
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrickSumo/Chatlings.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TrickSumo/Chatlings/issues"
+  },
+  "homepage": "https://github.com/TrickSumo/Chatlings#readme"
+}

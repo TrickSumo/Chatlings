@@ -5,6 +5,7 @@ import { Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
 import { UserPool, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
 import { PublicKey, KeyGroup } from 'aws-cdk-lib/aws-cloudfront';
 import { readFileSync } from 'fs';
+import { createLambdas } from './lambdas';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -54,6 +55,12 @@ export class CdkStack extends cdk.Stack {
       generateSecret: false,
     });
 
+    // Step 5 — Lambda functions + IAM permissions
+    const lambdas = createLambdas(this, {
+      table: dynamoDbTable,
+      bucket: mediaBucket,
+      userPool,
+    });
 
   }
 
