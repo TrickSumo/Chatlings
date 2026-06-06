@@ -1,9 +1,11 @@
 import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import { Table, AttributeType, BillingMode, StreamViewType } from 'aws-cdk-lib/aws-dynamodb';
-import { Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
+import { Bucket, HttpMethods, EventType } from 'aws-cdk-lib/aws-s3';
 import { UserPool, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
 import { PublicKey, KeyGroup } from 'aws-cdk-lib/aws-cloudfront';
+import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
+import { DynamoEventSource, S3EventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { readFileSync } from 'fs';
 import { createLambdas } from './lambdas';
 
@@ -61,6 +63,19 @@ export class CdkStack extends cdk.Stack {
       bucket: mediaBucket,
       userPool,
     });
+
+    // Lambda Event Sources
+    // DynamoDB Stream → MessageAnalyzer (AI moderation + broadcast on every new message)
+    lambdas.messageAnalyzerFn.addEventSource(new DynamoEventSource(dynamoDbTable, {
+      startingPosition: StartingPosition.LATEST,
+      batchSize: 1,
+    }));
+
+    // S3 PUT → ImageAnalyzer (Rekognition moderation on every uploaded image)
+    lambdas.imageAnalyzerFn.addEventSource(new S3EventSource(mediaBucket, {
+      events: [EventType.OBJECT_CREATED_PUT],
+      filters: [{ prefix: 'media/' }],
+    }));
 
   }
 
