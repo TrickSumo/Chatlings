@@ -8,6 +8,7 @@ import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
 import { DynamoEventSource, S3EventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { readFileSync } from 'fs';
 import { createLambdas } from './lambdas';
+import { createWebSocketApi } from './websocket-api';
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -76,6 +77,24 @@ export class CdkStack extends cdk.Stack {
       events: [EventType.OBJECT_CREATED_PUT],
       filters: [{ prefix: 'media/' }],
     }));
+
+    // Step 8 — WebSocket API
+    const { callbackUrl } = createWebSocketApi(this, {
+      authorizerFn:  lambdas.authorizerFn,
+      connectFn:     lambdas.connectFn,
+      disconnectFn:  lambdas.disconnectFn,
+      defaultFn:     lambdas.defaultFn,
+      sendMessageFn: lambdas.sendMessageFn,
+      createGroupFn: lambdas.createGroupFn,
+      joinGroupFn:   lambdas.joinGroupFn,
+      listGroupsFn:  lambdas.listGroupsFn,
+      fetchHistoryFn: lambdas.fetchHistoryFn,
+      askBotFn:      lambdas.askBotFn,
+      preSignedUrlFn: lambdas.preSignedUrlFn,
+    });
+
+    // Wire WebSocket callback URL into MessageAnalyzer now that the API exists
+    lambdas.messageAnalyzerFn.addEnvironment('WEBSOCKET_ENDPOINT', callbackUrl);
 
   }
 
