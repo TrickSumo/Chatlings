@@ -55,7 +55,7 @@ export class CdkStack extends cdk.Stack {
       generateSecret: false,
     });
 
-    // Step 5 — Lambda functions + IAM permissions
+    // Lambda functions + IAM permissions
     const lambdas = createLambdas(this, {
       table: dynamoDbTable,
       bucket: mediaBucket,
