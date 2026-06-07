@@ -254,6 +254,21 @@
   box-sizing: border-box;
 }
 
+.loadOlderBtn {
+  align-self: center;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 4px 14px;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+}
+
+.loadOlderBtn:hover {
+  background: #f0f0f0;
+}
+
 .messageGroup {
   display: flex;
   flex-direction: column;

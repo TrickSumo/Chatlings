@@ -25,6 +25,8 @@ export const handler = async (event) => {
         return createResponse(400, { error: "Group name is required!" }, requestId);
     }
 
+    const lastEvaluatedKey = messageData?.lastEvaluatedKey || undefined;
+
     try {
         const command = new QueryCommand({
             TableName: tableName,
@@ -33,13 +35,15 @@ export const handler = async (event) => {
                 ":pk": `GROUP#${groupName}`,
                 ":skPrefix": "MESSAGE#"
             },
+            ScanIndexForward: false,
             Limit: 60,
+            ...(lastEvaluatedKey && { ExclusiveStartKey: lastEvaluatedKey }),
         });
 
         const response = await docClient.send(command);
-        const messages = response.Items || [];
+        const messages = (response.Items || []).reverse();
 
-        return createResponse(200, { status: 200, messages }, requestId);
+        return createResponse(200, { status: 200, messages, lastEvaluatedKey: response.LastEvaluatedKey || null }, requestId);
     }
     catch (err) {
         console.log("Error in ListGroupsForUser handler:", err);
