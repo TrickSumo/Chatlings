@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import styles from '../pages/Home.module.css'
 import { webSocketActions } from '../utils/constants';
 import useGroupChatStore from '../stores/groupChatStore';
@@ -7,6 +7,7 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
     const currentChats = groupChats?.[selectedGroup]
     const { groupChatPaginationKeys, setGroupChatPaginationKey, prependGroupChats } = useGroupChatStore();
     const paginationKey = groupChatPaginationKeys?.[selectedGroup];
+    const bottomRef = useRef(null);
 
     useEffect(() => {
         const fetchChats = async (groupId) => {
@@ -22,6 +23,11 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
         fetchChats(selectedGroup);
     }, [selectedGroup])
 
+    // Scroll to bottom when messages load or a new message arrives
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [currentChats?.length])
+
     const loadOlder = async () => {
         try {
             const res = await sendMessageWithAck(webSocketActions.FETCH_GROUP_CHAT_HISTORY, {
@@ -36,7 +42,7 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
         }
     }
 
-    if (!currentChats) {
+    if (!currentChats || !currentUser) {
         return (
             <div className={styles.chatContainer}>
                 <div className={styles.noMessages}>Loading!!!</div>
@@ -80,6 +86,7 @@ const ChatMessages = ({ selectedGroup, groupChats, setGroupChats, currentUser, s
                     )}
                 </div>
             ))}
+            <div ref={bottomRef} />
         </div>
     )
 }

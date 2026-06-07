@@ -45,13 +45,21 @@ export const handler = async (event) => {
         ))
         const batchCommand = new BatchGetCommand({
             RequestItems: {
-                [tableName]: {
-                    Keys: keys
-                }
+                [tableName]: { Keys: keys }
             }
         });
         const batchResponse = await docClient.send(batchCommand);
-        return createResponse(200, { groups: batchResponse?.Responses?.[tableName] || [] }, requestId);
+        const groups = [...(batchResponse?.Responses?.[tableName] || [])];
+
+        // Retry keys DynamoDB couldn't process due to throttling
+        let unprocessed = batchResponse.UnprocessedKeys;
+        while (unprocessed && Object.keys(unprocessed).length > 0) {
+            const retryResponse = await docClient.send(new BatchGetCommand({ RequestItems: unprocessed }));
+            groups.push(...(retryResponse.Responses?.[tableName] || []));
+            unprocessed = retryResponse.UnprocessedKeys;
+        }
+
+        return createResponse(200, { groups }, requestId);
     }
     catch (err) {
         console.log("Error in ListGroupsForUser handler:", err);
