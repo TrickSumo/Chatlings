@@ -2,32 +2,20 @@
 
 A serverless, real-time chat platform for children aged 8–14 with AI content moderation and CloudFront-protected media.
 
-**Live app:** https://d19ptumhqepwqw.cloudfront.net · **Demo video:** https://youtu.be/-6383PUenpg · **Blog:** https://dev.to/aws-builders/chatlings-ai-moderated-serverless-chat-app-for-kids-15lp
+**Live app:** https://d19ptumhqepwqw.cloudfront.net
+**Demo video:** https://youtu.be/-6383PUenpg
+**Blog:** https://dev.to/aws-builders/chatlings-ai-moderated-serverless-chat-app-for-kids-15lp
 
 ![Chatlings Github Poster](https://github.com/user-attachments/assets/760905d1-4aea-4562-a516-b9d894f8b101)
 
----
-
-## What I Finished for This Hackathon
-
-- **One-command AWS deployment** via AWS CDK — `npm run deploy` provisions the entire stack (DynamoDB, S3, Lambda, API Gateway, CloudFront, Cognito) and deploys the frontend automatically
-- **Fixed WebSocket through CloudFront** — added `OriginRequestPolicy` to forward upgrade headers and query strings so the Lambda Authorizer is actually invoked
-- **Fixed CloudFront signed cookies** — origin request policy on the `/api*` behavior was stripping `Set-Cookie` headers before they reached the browser; media access now works correctly
-- **Fixed DynamoDB bugs:**
-  - `FetchGroupChatHistory` was returning the oldest messages instead of the newest (`ScanIndexForward: false` + pagination with `LastEvaluatedKey`)
-  - `MessageAnalyzer` was making N individual DynamoDB reads per broadcast → replaced with a single `BatchGetCommand`
-  - `ListGroupsForUser` silently dropped groups when DynamoDB returned `UnprocessedKeys`
-  - Stale `connectionId` entries now cleaned up on `GoneException` (410) from API Gateway
-
----
 
 ## Features
 
 - **Real-time group chat** over WebSocket API Gateway, authenticated with Cognito and a Lambda Authorizer
-- **AI content moderation** — every message is checked by Amazon Bedrock (Nova Micro) before being broadcast; unsafe messages are replaced with a notice
-- **Image sharing** — direct browser-to-S3 upload via pre-signed URLs; images served through CloudFront signed cookies
-- **Image moderation** — Amazon Rekognition scans every uploaded image for inappropriate content
-- **Ask the bot** — mention `@askbot` in any message to get an AI response inline
+- **AI content moderation** - every message is checked by Amazon Bedrock (Nova Micro) before being broadcast; unsafe messages are replaced with a notice
+- **Image sharing** - direct browser-to-S3 upload via pre-signed URLs; images served through CloudFront signed cookies
+- **Image moderation** - Amazon Rekognition scans every uploaded image for inappropriate content
+- **Ask the bot** - mention `@askbot` in any message to get an AI response inline
 
 ---
 
