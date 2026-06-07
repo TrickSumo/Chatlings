@@ -60,5 +60,8 @@ export function createWebSocketApi(stack: Stack, props: WebSocketApiProps) {
   // HTTP callback URL used by MessageAnalyzer to PostToConnection
   const callbackUrl = stage.callbackUrl;
 
-  return { api, stage, callbackUrl };
+  // Raw domain needed by CloudFront HttpOrigin (no protocol prefix)
+  const wsApiDomain = `${api.apiId}.execute-api.${stack.region}.amazonaws.com`;
+
+  return { api, stage, callbackUrl, wsApiDomain };
 }

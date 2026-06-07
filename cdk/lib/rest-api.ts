@@ -1,27 +1,32 @@
 import { Stack } from 'aws-cdk-lib';
-import { LambdaIntegration, RestApi, Cors } from 'aws-cdk-lib/aws-apigateway';
+import { HttpApi, CorsHttpMethod, HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Function } from 'aws-cdk-lib/aws-lambda';
 
-interface RestApiProps {
+interface HttpApiProps {
   generateSignedCookiesFn: Function;
 }
 
-export function createRestApi(stack: Stack, props: RestApiProps) {
+export function createRestApi(stack: Stack, props: HttpApiProps) {
   const { generateSignedCookiesFn } = props;
 
-  const api = new RestApi(stack, 'ChatlingsRestApi', {
-    restApiName: 'ChatlingsRestApi',
-    defaultCorsPreflightOptions: {
-      allowOrigins: Cors.ALL_ORIGINS,
-      allowMethods: ['POST', 'OPTIONS'],
+  const api = new HttpApi(stack, 'ChatlingsHttpApi', {
+    corsPreflight: {
+      allowOrigins: ['*'],
+      allowMethods: [CorsHttpMethod.GET, CorsHttpMethod.OPTIONS],
       allowHeaders: ['Content-Type', 'Authorization'],
-      allowCredentials: true,
     },
   });
 
-  // POST /signed-cookies → GenerateSignedCookies Lambda
-  const signedCookies = api.root.addResource('signed-cookies');
-  signedCookies.addMethod('POST', new LambdaIntegration(generateSignedCookiesFn));
+  // Frontend calls GET /api/getSignedCookie through CloudFront /api* behavior
+  api.addRoutes({
+    path: '/api/getSignedCookie',
+    methods: [HttpMethod.GET],
+    integration: new HttpLambdaIntegration('SignedCookiesIntegration', generateSignedCookiesFn),
+  });
 
-  return { api };
+  // Raw domain needed by CloudFront HttpOrigin (no protocol prefix)
+  const apiDomain = `${api.apiId}.execute-api.${stack.region}.amazonaws.com`;
+
+  return { api, apiDomain };
 }

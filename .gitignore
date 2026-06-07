@@ -5,4 +5,5 @@ dist
 *.bkp
 keys
 cdk.out*
+cdk-outputs.json
 TODO.md

@@ -10,6 +10,7 @@
     "esbuild": "^0.28.0"
   },
   "scripts": {
+    "deploy": "bash deploy.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

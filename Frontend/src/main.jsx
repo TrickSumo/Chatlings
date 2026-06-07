@@ -11,8 +11,8 @@ import './index.css'
 
 
 const cognitoAuthConfig = {
-  authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_4xNByjTAH",
-  client_id: "3mtahugr0fpkbfioidkam7hibs",
+  authority: import.meta.env.VITE_COGNITO_AUTHORITY,
+  client_id: import.meta.env.VITE_COGNITO_CLIENT_ID,
   redirect_uri: `${window.location.origin}/auth`,
   response_type: "code",
   scope: "email openid phone",
