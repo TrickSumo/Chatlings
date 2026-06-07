@@ -2,6 +2,7 @@ import { Stack, RemovalPolicy, CfnOutput } from 'aws-cdk-lib';
 import {
   Distribution, PriceClass, ViewerProtocolPolicy,
   AllowedMethods, CachePolicy, KeyGroup, PublicKey,
+  OriginRequestPolicy,
 } from 'aws-cdk-lib/aws-cloudfront';
 import { S3BucketOrigin, HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
@@ -56,6 +57,7 @@ export function createCloudFront(stack: Stack, props: CloudFrontProps) {
         viewerProtocolPolicy: ViewerProtocolPolicy.HTTPS_ONLY,
         allowedMethods: AllowedMethods.ALLOW_ALL,
         cachePolicy: CachePolicy.CACHING_DISABLED,
+        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       },
     },
 
