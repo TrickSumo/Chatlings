@@ -33,9 +33,10 @@ A serverless, real-time chat platform for children aged 8–14 with AI content m
 
 ## Architecture
 
-![Chatlings Architecture](https://github.com/user-attachments/assets/ADD-YOUR-ARCHITECTURE-IMAGE-URL-HERE)
+<img width="1792" height="1033" alt="image" src="https://github.com/user-attachments/assets/38339e71-c688-4015-a08b-1677de76f1ea" />
 
-CloudFront is the single entrypoint with four behaviors:
+
+CloudFront is the single entry point with four behaviors:
 
 | Path | Origin | Notes |
 |---|---|---|
