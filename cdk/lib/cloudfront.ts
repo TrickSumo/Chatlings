@@ -44,12 +44,15 @@ export function createCloudFront(stack: Stack, props: CloudFrontProps) {
         cachePolicy: CachePolicy.CACHING_OPTIMIZED,
       },
       // HTTP API — never cache (signed cookie generation)
-      // Frontend calls: GET /api/getSignedCookie
+      // ALL_VIEWER_EXCEPT_HOST_HEADER is required here: without an origin request policy
+      // that includes cookies, CloudFront strips Set-Cookie headers from the origin response
+      // before forwarding to the viewer — so the signed cookies never reach the browser.
       '/api*': {
         origin: new HttpOrigin(httpApiDomain),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
         cachePolicy: CachePolicy.CACHING_DISABLED,
+        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       },
       // WebSocket API — frontend connects to wss://cloudfront-domain/production/
       '/production*': {

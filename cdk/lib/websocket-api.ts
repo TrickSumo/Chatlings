@@ -42,14 +42,15 @@ export function createWebSocketApi(stack: Stack, props: WebSocketApiProps) {
     },
   });
 
-  // Custom action routes
-  api.addRoute('sendMessage',         { integration: new WebSocketLambdaIntegration('SendMessageIntegration',    sendMessageFn) });
-  api.addRoute('createGroup',         { integration: new WebSocketLambdaIntegration('CreateGroupIntegration',    createGroupFn) });
-  api.addRoute('joinGroup',           { integration: new WebSocketLambdaIntegration('JoinGroupIntegration',      joinGroupFn) });
-  api.addRoute('listGroupsForUser',   { integration: new WebSocketLambdaIntegration('ListGroupsIntegration',     listGroupsFn) });
-  api.addRoute('fetchGroupChatHistory', { integration: new WebSocketLambdaIntegration('FetchHistoryIntegration', fetchHistoryFn) });
-  api.addRoute('askBot',              { integration: new WebSocketLambdaIntegration('AskBotIntegration',         askBotFn) });
-  api.addRoute('generatePreSignedUrl', { integration: new WebSocketLambdaIntegration('PreSignedUrlIntegration',  preSignedUrlFn) });
+  // Custom action routes — returnResponse: true tells API Gateway to forward the Lambda
+  // return value back to the WebSocket client (enables the request/response pattern)
+  api.addRoute('sendMessageToGroup',    { integration: new WebSocketLambdaIntegration('SendMessageIntegration',    sendMessageFn),  returnResponse: true });
+  api.addRoute('createGroup',           { integration: new WebSocketLambdaIntegration('CreateGroupIntegration',    createGroupFn),  returnResponse: true });
+  api.addRoute('joinGroup',             { integration: new WebSocketLambdaIntegration('JoinGroupIntegration',      joinGroupFn),    returnResponse: true });
+  api.addRoute('listGroupsForUser',     { integration: new WebSocketLambdaIntegration('ListGroupsIntegration',     listGroupsFn),   returnResponse: true });
+  api.addRoute('fetchGroupChatHistory', { integration: new WebSocketLambdaIntegration('FetchHistoryIntegration',   fetchHistoryFn), returnResponse: true });
+  api.addRoute('askBot',                { integration: new WebSocketLambdaIntegration('AskBotIntegration',         askBotFn),       returnResponse: true });
+  api.addRoute('generateS3PreSignedURL', { integration: new WebSocketLambdaIntegration('PreSignedUrlIntegration',  preSignedUrlFn), returnResponse: true });
 
   const stage = new WebSocketStage(stack, 'ChatlingsWebSocketStage', {
     webSocketApi: api,
