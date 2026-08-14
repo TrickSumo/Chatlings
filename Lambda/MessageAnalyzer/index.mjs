@@ -2,7 +2,7 @@ import {
     BedrockRuntimeClient,
     ConverseCommand
 } from "@aws-sdk/client-bedrock-runtime";
-import { DynamoDBDocumentClient, UpdateCommand, QueryCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand, QueryCommand, BatchGetCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { ApiGatewayManagementApiClient, PostToConnectionCommand } from "@aws-sdk/client-apigatewaymanagementapi";
 
@@ -169,31 +169,30 @@ const notifyGroupMembers = async (groupName, messageItem, isModerated = false) =
             item.SK.replace("MEMBER#", "")
         );
 
-        // Get active connections for these users
-        const connectionPromises = userIds.map(async (userId) => {
-            try {
-                const userProfileCommand = new GetCommand({
-                    TableName: tableName,
-                    Key: {
-                        PK: `USER#${userId}`,
-                        SK: "PROFILE"
-                    },
-                    ProjectionExpression: "connectionId"
-                });
-
-                const userProfile = await docClient.send(userProfileCommand);
-                return {
-                    userId,
-                    connectionId: userProfile.Item?.connectionId
-                };
-            } catch (err) {
-                console.log(`Failed to get connection for user ${userId}:`, err);
-                return { userId, connectionId: null };
+        // Batch-fetch all user profiles in one DynamoDB request
+        const batchCommand = new BatchGetCommand({
+            RequestItems: {
+                [tableName]: {
+                    Keys: userIds.map(userId => ({ PK: `USER#${userId}`, SK: "PROFILE" })),
+                    ProjectionExpression: "PK, connectionId"
+                }
             }
         });
 
-        const connections = await Promise.all(connectionPromises);
-        const activeConnections = connections.filter(conn => conn.connectionId);
+        let batchResponse = await docClient.send(batchCommand);
+        const profiles = [...(batchResponse.Responses?.[tableName] || [])];
+
+        // Retry any keys DynamoDB couldn't process due to throttling
+        let unprocessed = batchResponse.UnprocessedKeys;
+        while (unprocessed && Object.keys(unprocessed).length > 0) {
+            const retryResponse = await docClient.send(new BatchGetCommand({ RequestItems: unprocessed }));
+            profiles.push(...(retryResponse.Responses?.[tableName] || []));
+            unprocessed = retryResponse.UnprocessedKeys;
+        }
+
+        const activeConnections = profiles
+            .filter(p => p.connectionId)
+            .map(p => ({ userId: p.PK.replace("USER#", ""), connectionId: p.connectionId }));
 
         if (activeConnections.length === 0) {
             console.log("No active connections found for group members");
@@ -217,7 +216,17 @@ const notifyGroupMembers = async (groupName, messageItem, isModerated = false) =
                 await apiGatewayClient.send(command);
                 console.log(`✅ ${isModerated ? 'Moderation' : 'Message'} notification sent to user ${conn.userId}`);
             } catch (err) {
-                console.log(`❌ Failed to notify user ${conn.userId} (${conn.connectionId}):`, err.message);
+                if (err.$metadata?.httpStatusCode === 410) {
+                    // Client disconnected without a clean $disconnect — remove stale connectionId
+                    await docClient.send(new UpdateCommand({
+                        TableName: tableName,
+                        Key: { PK: `USER#${conn.userId}`, SK: "PROFILE" },
+                        UpdateExpression: "REMOVE connectionId"
+                    })).catch(() => {});
+                    console.log(`🧹 Removed stale connectionId for user ${conn.userId}`);
+                } else {
+                    console.log(`❌ Failed to notify user ${conn.userId} (${conn.connectionId}):`, err.message);
+                }
             }
         });
 

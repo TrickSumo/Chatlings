@@ -4,3 +4,6 @@ dist
 *.zip
 *.bkp
 keys
+cdk.out*
+cdk-outputs.json
+TODO.md

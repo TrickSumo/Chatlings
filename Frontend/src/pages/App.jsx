@@ -1,10 +1,18 @@
+import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
+import { getSignedCookie } from "../utils/apis";
 
 
 function App() {
   const auth = useAuth();
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      getSignedCookie().catch(() => {});
+    }
+  }, [auth.isAuthenticated]);
 
   if (auth.isLoading) {
     return <div>Loading...</div>;

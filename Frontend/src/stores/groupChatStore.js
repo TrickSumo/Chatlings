@@ -7,6 +7,7 @@ const useGroupChatStore = create((set, get) => ({
     groups: null,
     selectedGroup: null,
     groupChats: {},
+    groupChatPaginationKeys: {},
     currentUser: null,
     emojiOptions: [
         '🌿', '🚀', '🎨', '⚽', '🎵',
@@ -29,6 +30,18 @@ const useGroupChatStore = create((set, get) => ({
         groupChats: {
             ...state.groupChats,
             [groupId]: newChats
+        }
+    })),
+    prependGroupChats: (groupId, olderChats) => set((state) => ({
+        groupChats: {
+            ...state.groupChats,
+            [groupId]: [...olderChats, ...(state.groupChats[groupId] || [])]
+        }
+    })),
+    setGroupChatPaginationKey: (groupId, key) => set((state) => ({
+        groupChatPaginationKeys: {
+            ...state.groupChatPaginationKeys,
+            [groupId]: key
         }
     })),
     addGroupChat: (groupId, newChat) => set((state) => ({
